@@ -14,7 +14,7 @@ bin/
 #.gitignore
 
 *.exe
-*.txt
+#*.txt
 *.def
 *.dsp
 *.lib
