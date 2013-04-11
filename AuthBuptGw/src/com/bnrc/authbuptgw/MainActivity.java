@@ -2,7 +2,6 @@ package com.bnrc.authbuptgw;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
