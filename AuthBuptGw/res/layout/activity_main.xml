@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bk"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -14,9 +15,44 @@
         android:id="@+id/layout_table"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp" >
+        android:layout_marginTop="20dp" >
 
         <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_username" />
+
+            <EditText
+                android:id="@+id/txt_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:singleLine="true" >
+
+                <requestFocus />
+            </EditText>
+        </TableRow>
+
+        <TableRow android:layout_marginTop="10dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_passwd" />
+
+            <EditText
+                android:id="@+id/txt_passwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" >
+
+                <requestFocus />
+            </EditText>
+        </TableRow>
+
+        <TableRow android:layout_marginTop="10dp" >
 
             <CheckBox
                 android:id="@+id/chkbtn_enable"
@@ -31,7 +67,7 @@
                 android:textOn="@string/btn_disable" />
         </TableRow>
 
-        <TableRow>
+        <TableRow android:layout_marginTop="10dp" >
 
             <TextView />
 
@@ -39,11 +75,10 @@
                 android:id="@+id/btn_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="54dp"
-                android:text="@string/btn_settings" />
+                android:text="@string/btn_about" />
         </TableRow>
 
-        <TableRow>
+        <TableRow android:layout_marginTop="10dp" >
 
             <TextView />
 
@@ -59,11 +94,11 @@
         android:id="@+id/txt_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
-        android:enabled="true"
+        android:enabled="false"
+        android:text="@string/txt_line"
         android:inputType="textMultiLine" >
-
     </EditText>
 
     <TextView
