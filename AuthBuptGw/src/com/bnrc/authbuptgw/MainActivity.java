@@ -23,6 +23,7 @@ public class MainActivity extends Activity {
 	static final String PREF_NAME = "AuthBuptGW";
 	static final String USERNAME = "USERNAME";
 	static final String PASSWORD = "PASSWORD";
+	static final int LOGIN_NUM = 3;
 
 	/**
 	 * 是否开启自动登录功能, true为开启, false为不开启。
@@ -127,6 +128,9 @@ public class MainActivity extends Activity {
 		});
 	}
 
+	/**
+	 * 初始化
+	 */
 	protected void init() {
 		m_tgbtn = (ToggleButton) this.findViewById(R.id.btn_enable_disable);
 		m_chkbx = (CheckBox) this.findViewById(R.id.chkbtn_enable);
@@ -135,6 +139,11 @@ public class MainActivity extends Activity {
 		m_password = (EditText) this.findViewById(R.id.txt_passwd);
 
 		initEvent(); // 初始化事件处理
+		
+		bEnable = true;  //自动登录处理
+		m_tgbtn.setChecked(bEnable);
+		m_chkbx.setChecked(bEnable);
+		
 	}
 	/**
 	 * 
@@ -143,6 +152,11 @@ public class MainActivity extends Activity {
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
+		
+		checkNetwork();  //检查网络是否正常!
+		
+		doLogin(); //自动登录处理
+		
 	}
 	/**
 	 * 
@@ -217,18 +231,71 @@ public class MainActivity extends Activity {
 	}
 
 	/**
+	 * 检查网络是否可用
+	 */
+	protected void checkNetwork(){
+
+		boolean bWifiEnable = AuthUtil.isWifiEnable(this);
+		
+		if( !bWifiEnable ){
+			m_msg.setText(R.string.msg_wifi_fail); //wifi不可用
+			
+		} else  {//进行网络检查
+			String strChkUrl = this.getString(R.string.URL_CHECK_NETWORK);
+	
+			//bNetOK = false;
+			
+			for( int i=0; i<LOGIN_NUM; i++ ){
+				if( AuthUtil.checkUrl(strChkUrl)) { //测试网络是否连通
+					bNetOK = true;
+					break;
+				}
+				
+			}
+			//启用定时器检查结果
+			if( bNetOK ){
+				m_msg.setText(R.string.msg_network_ok);
+			} else {
+				m_msg.setText(R.string.msg_network_fail);
+			}
+		}// end of if
+	}
+	/**
 	 * 自动登录处理
 	 */
 	protected void doLogin() {
-		if (bEnable) {//进行登录处理
+		
+		boolean bWifiEnable = AuthUtil.isWifiEnable(this);
+		
+		if( !bWifiEnable ){
+			m_msg.setText(R.string.msg_wifi_fail); //wifi不可用
+			
+		} else if ( bEnable && (!bNetOK) ) {//进行登录处理
+			m_msg.setText(R.string.msg_login);
+			
 			String userName = m_username.getText().toString();
 			String passWord = m_password.getText().toString();
 			String strUrl = this.getString(R.string.URL_LOGIN);
+			String strChkUrl = this.getString(R.string.URL_CHECK_NETWORK);
 			
-			m_msg.setText(R.string.msg_login_ok);
-		} else {
-			m_msg.setText(R.string.msg_login_fail);
-		}
+			//bNetOK = false;
+			
+			for( int i=0; i<LOGIN_NUM; i++ ){
+				AuthUtil.login(strUrl, userName, passWord);  //发送登录请求到服务器
+				if( AuthUtil.checkUrl(strChkUrl)) { //测试网络是否连通
+					bNetOK = true;
+					break;
+				}
+				
+			}
+			//启用定时器检查结果
+			if( bNetOK ){
+				m_msg.setText(R.string.msg_login_ok);
+			} else {
+				m_msg.setText(R.string.msg_login_fail);
+			}
+		}// end of if
+		
 	}
 
 	/**
