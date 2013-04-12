@@ -1,7 +1,5 @@
 package com.bnrc.authbuptgw;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.net.HttpURLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -124,8 +122,8 @@ public class AuthUtil {
 //			// System.out.println("**** WIFI is off");
 //
 //		}
-		
-		return bOK;
+		return true;
+		//return bOK;
 	}
 
 	/**

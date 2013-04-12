@@ -1,6 +1,9 @@
 package com.bnrc.authbuptgw;
 
+import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.text.Editable;
@@ -24,7 +27,14 @@ public class MainActivity extends Activity {
 	static final String USERNAME = "USERNAME";
 	static final String PASSWORD = "PASSWORD";
 	static final int LOGIN_NUM = 3;
-
+	static final int ANDROID2_2 = 8;
+	
+	/**
+	 * Android系统版本号
+	 * 2.2  --  8
+	 */
+	int sysVersion = 8; 
+	
 	/**
 	 * 是否开启自动登录功能, true为开启, false为不开启。
 	 */
@@ -161,8 +171,26 @@ public class MainActivity extends Activity {
 	/**
 	 * 
 	 */
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
+		sysVersion = VERSION.SDK_INT;
+		if ( sysVersion > ANDROID2_2 ) {
+	         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+	                 .detectDiskReads()
+	                 .detectDiskWrites()
+	                 .detectNetwork()   // or .detectAll() for all detectable problems
+	                 .penaltyLog()
+	                 .build());
+	         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+	                 .detectLeakedSqlLiteObjects()
+	                 .detectLeakedClosableObjects()
+	                 .penaltyLog()
+	                 .penaltyDeath()
+	                 .build());
+	     }
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
@@ -207,7 +235,7 @@ public class MainActivity extends Activity {
 	 * @param v
 	 */
 	protected void onClickSettings(View v) {
-
+		checkNetwork();
 	}
 
 	/**
@@ -243,8 +271,6 @@ public class MainActivity extends Activity {
 		} else  {//进行网络检查
 			String strChkUrl = this.getString(R.string.URL_CHECK_NETWORK);
 	
-			//bNetOK = false;
-			
 			for( int i=0; i<LOGIN_NUM; i++ ){
 				if( AuthUtil.checkUrl(strChkUrl)) { //测试网络是否连通
 					bNetOK = true;

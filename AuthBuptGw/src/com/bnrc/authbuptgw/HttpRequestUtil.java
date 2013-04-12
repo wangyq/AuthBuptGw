@@ -54,6 +54,7 @@ public class HttpRequestUtil {
 				conn.setRequestProperty(entry.getKey(), entry.getValue());
 			}
 		}
+		conn.connect();  //连接到服务器
 		conn.getResponseCode();
 		return conn;
 	}
@@ -84,6 +85,9 @@ public class HttpRequestUtil {
 		HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
 		conn.setRequestMethod("POST");
 		conn.setDoOutput(true);
+		
+		conn.connect();
+		
 		OutputStream out = conn.getOutputStream();
 		out.write(buf.toString().getBytes("UTF-8"));
 		if (headers != null && !headers.isEmpty()) {
