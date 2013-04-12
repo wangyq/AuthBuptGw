@@ -1,10 +1,14 @@
 package com.bnrc.authbuptgw;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.net.HttpURLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+
+import android.content.Context;
 
 /**
  * 自动登录工具类
@@ -67,6 +71,28 @@ public class AuthUtil {
 		return bOK;
 		
 	}
+	
+	/**
+	 * 连接url测试网络连通性
+	 * @param strUrl
+	 * @return
+	 */
+	public static boolean checkUrl(String strUrl){
+		boolean bOK = false;
+		if( (strUrl.length()==0) ) return bOK;
+		try {
+			HttpURLConnection conn = (HttpURLConnection) HttpRequestUtil.sendGetRequest(strUrl,null, null);
+			int code = conn.getResponseCode();
+			bOK = (code==200);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		return bOK;
+	}
+	
+
 	/**
 	 * 返回加密的字符串
 	 * @return
