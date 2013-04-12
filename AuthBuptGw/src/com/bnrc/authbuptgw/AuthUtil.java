@@ -122,8 +122,8 @@ public class AuthUtil {
 //			// System.out.println("**** WIFI is off");
 //
 //		}
-		return true;
-		//return bOK;
+		//return true;
+		return bOK;
 	}
 
 	/**
