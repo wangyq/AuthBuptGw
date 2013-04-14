@@ -83,41 +83,6 @@ public class HttpUtil {
 			}
 		}
 	}
-	
-	/**
-	 * 
-	 * @param strUrl
-	 * @param params
-	 * @return
-	 */
-	public static HttpResponse sendGet(String strUrl, Map<String, String> params){
-		HttpRequest request = new HttpRequest(strUrl, "GET");
-		request.addParam(params);
-		
-		request.addHeaderField("Connection: keep-alive");
-		request.addHeaderField("Cache-Control: no-cache");
-		request.addHeaderField("Accept-Language: zh-CN");
-		request.addHeaderField("Accept-Charset: GBK,utf-8");
-		
-		return send(request);
-	}
-	/**
-	 * 
-	 * @param strUrl
-	 * @param params
-	 * @return
-	 */
-	public static HttpResponse sendPost(String strUrl, Map<String, String> params){
-		HttpRequest request = new HttpRequest(strUrl, "POST");
-		request.addParam(params);
-		
-		request.addHeaderField("Connection: keep-alive");
-		request.addHeaderField("Cache-Control: no-cache");
-		request.addHeaderField("Accept-Language: zh-CN");
-		request.addHeaderField("Accept-Charset: GBK,utf-8");
-		
-		return send(request);
-	}
 
 	/**
 	 * send request and get response header and response content

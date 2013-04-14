@@ -156,7 +156,15 @@ public class AuthUtil {
 	 * @return
 	 */
 	public static boolean checkUrl(String strUrl, String content) {
-		HttpResponse response = HttpUtil.sendGet(strUrl, null);
+		HttpRequest request = new HttpRequest(strUrl, "GET");  //GET 方法
+		
+		request.addHeaderField("Cache-Control: no-cache");
+		request.addHeaderField("Connection: keep-alive");
+		request.addHeaderField("Accept-Language: zh-CN");
+		request.addHeaderField("Accept-Charset: GBK,utf-8");
+
+		//HttpResponse response = HttpUtil.sendAndGetContent(request);
+		HttpResponse response = HttpUtil.send(request);
 		return "200".equals(response.getStatusCode());
 	}
 

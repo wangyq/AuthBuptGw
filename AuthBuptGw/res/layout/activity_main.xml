@@ -77,35 +77,27 @@
                 android:layout_height="wrap_content"
                 android:text="@string/btn_about" />
         </TableRow>
-<!-- 
-        <TableRow android:layout_marginTop="10dp" >
-
-            <TextView />
-
-            <Button
-                android:id="@+id/btn_quit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/btn_quit" />
-        </TableRow>
- -->        
     </TableLayout>
 
-    <EditText
-        android:id="@+id/txt_status"
+    <LinearLayout
+        android:orientation="horizontal"
+         android:layout_marginTop="10dp"
+         android:layout_marginLeft="5dp"
+         android:layout_marginRight="5dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:enabled="false"
-        android:text="@string/txt_line"
-        android:inputType="textMultiLine" >
-    </EditText>
+        android:layout_height="wrap_content" >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F7FE2E" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/login_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="" />
 
 </LinearLayout>
