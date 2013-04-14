@@ -1,6 +1,11 @@
 package com.bnrc.authbuptgw;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.text.Editable;
@@ -24,7 +29,13 @@ public class MainActivity extends Activity {
 	static final String USERNAME = "USERNAME";
 	static final String PASSWORD = "PASSWORD";
 	static final int LOGIN_NUM = 3;
-
+	static final int UPDATE_UI = 0;
+	static final int TASK_DELAY = 1 * 1000;   // Seconds;
+	
+	private Timer mTimer;
+    private TimerTask mTimerTask;
+    private Handler mHandler;
+    
 	/**
 	 * 是否开启自动登录功能, true为开启, false为不开启。
 	 */
@@ -52,6 +63,49 @@ public class MainActivity extends Activity {
 	EditText m_username = null;
 	EditText m_password = null;
 
+	/**
+	 * 
+	 */
+	protected void initTimerAndHandler(){
+		
+		mTimer = new Timer();
+		mTimerTask = new TimerTask() {
+
+            @Override
+            public void run() {
+            	
+                mHandler.sendEmptyMessage(UPDATE_UI);
+/*              
+                // It doesn't work updating the UI inside a timer.
+                Calendar cal = Calendar.getInstance();
+                mButton.setText(cal.toString());
+*/          
+                }
+        };
+        
+		mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what){
+                case UPDATE_UI:
+
+                    break;
+                }
+            }
+        };
+	}
+	
+	protected void destroyTimer(){
+		if( mTimerTask !=null ){
+			mTimerTask.cancel();
+			mTimerTask = null;
+		}
+		if( mTimer!= null ){
+			mTimer.cancel();
+			mTimer = null;
+		}
+	}
+	
 	/**
 	 * 初始化函数, 在onCreate()方法中调用
 	 */
@@ -139,6 +193,7 @@ public class MainActivity extends Activity {
 		m_password = (EditText) this.findViewById(R.id.txt_passwd);
 
 		initEvent(); // 初始化事件处理
+		initTimerAndHandler(); //初始化定时器
 		
 		bEnable = true;  //自动登录处理
 		m_tgbtn.setChecked(bEnable);
@@ -158,6 +213,15 @@ public class MainActivity extends Activity {
 		doLogin(); //自动登录处理
 		
 	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		
+		destroyTimer();
+	}
+
 	/**
 	 * 
 	 */
@@ -188,6 +252,7 @@ public class MainActivity extends Activity {
 
 		m_chkbx.setChecked(bEnable);
 
+		mTimer.schedule(mTimerTask, TASK_DELAY);
 		doLogin();
 	}
 
