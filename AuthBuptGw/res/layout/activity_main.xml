@@ -66,7 +66,20 @@
                 android:textOff="@string/btn_enable"
                 android:textOn="@string/btn_disable" />
         </TableRow>
+       <TableRow android:layout_marginTop="10dp" >
 
+            <CheckBox
+                android:id="@+id/chkbtn_wifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ToggleButton
+                android:id="@+id/btn_wifi_enable_disable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOff="@string/btn_wifi_on"
+                android:textOn="@string/btn_wifi_off" />
+        </TableRow>
         <TableRow android:layout_marginTop="10dp" >
 
             <TextView />

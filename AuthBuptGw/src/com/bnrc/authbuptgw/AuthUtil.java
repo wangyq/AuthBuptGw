@@ -293,6 +293,15 @@ public class AuthUtil {
 	}
 
 	/**
+	 * 开启关闭 Wifi功能
+	 * @param activitiy
+	 * @param isOn
+	 */
+	public static void changeWifiState(Activity activitiy,boolean isOn){
+		WifiManager wm = (WifiManager) activitiy.getSystemService(Context.WIFI_SERVICE);
+		wm.setWifiEnabled(isOn);
+	}
+	/**
 	 * 返回加密的字符串
 	 * 
 	 * @return

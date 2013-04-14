@@ -11,11 +11,15 @@
     <string name="btn_enable">启  用</string>
     <string name="btn_disable">禁  用</string>
     <string name="btn_settings">设  置</string>
+    <string name="btn_wifi_on">Wifi On</string>
+    <string name="btn_wifi_off">Wifi Off</string>
     <string name="btn_quit">退  出</string>
     <string name="btn_about">关  于</string>
     <string name="msg_login_ok">登录成功!</string>
     <string name="msg_login_fail">未登录或者登录失败!</string>
     <string name="msg_wifi_fail">WIFI网络不可用!</string>
+    <string name="msg_wifi_change_on">开启WIFI网络中......</string>
+    <string name="msg_wifi_change_off">关闭WIFI网络中......</string>
     <string name="msg_network_ok">互联网正常!</string>
     <string name="msg_network_fail">互联网不可用!</string>
     <string name="msg_login">登录中......</string>

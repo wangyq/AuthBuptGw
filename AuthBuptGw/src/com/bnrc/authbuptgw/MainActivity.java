@@ -56,6 +56,9 @@ public class MainActivity extends Activity {
 
 	static final int UPDATE_UI = 0;
 	static final int TASK_DELAY = 1 * 1000; // Seconds;
+	static final int TASK_LOGIN = 1;
+	static final int TASK_WIFI = 2;
+	static final int TASK_UPDATE_UI = 4;
 
 	private Timer mTimer;
 	private Handler mHandler;
@@ -84,10 +87,12 @@ public class MainActivity extends Activity {
 	 * 
 	 */
 	CheckBox m_chkbx = null;
+	CheckBox m_chkbx_wifi = null;
 	/**
 	 * 
 	 */
 	ToggleButton m_tgbtn = null;
+	ToggleButton m_tgbtn_wifi = null;
 
 	/**
 	 * 
@@ -146,6 +151,25 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				onClickAbout(v);
+			}
+
+		});
+		// wifi
+		((ToggleButton) this.findViewById(R.id.btn_wifi_enable_disable)).setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				onClickWifi();
+			}
+
+		});
+		((CheckBox) this.findViewById(R.id.chkbtn_wifi)).setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				onClickWifi();
 			}
 
 		});
@@ -208,14 +232,18 @@ public class MainActivity extends Activity {
 			@Override
 			public void onReceive(Context context, android.content.Intent intent) {// Wifi状态变化
 				// TODO Auto-generated method stub
-				 if(intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)){
-					 NetworkInfo info=intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
-						if(info.getState().equals(NetworkInfo.State.CONNECTED) || info.getState().equals(NetworkInfo.State.DISCONNECTED))
-						{//如果连接可用, 或者连接不可用
-							scheduleTask();
-						}
-				scheduleTask(); // 启动后台检查任务
-				 }
+				if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
+					NetworkInfo info = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
+					if (info.getState().equals(NetworkInfo.State.CONNECTED) || info.getState().equals(NetworkInfo.State.DISCONNECTED)) {// 如果连接可用,
+																																		// 或者连接不可用
+						scheduleTask(TASK_LOGIN);
+					} else {
+						scheduleTask(TASK_UPDATE_UI);
+					}
+
+				} else if (intent.getAction().equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
+					scheduleTask(TASK_UPDATE_UI);
+				}
 			}
 		}, filter);
 
@@ -227,6 +255,10 @@ public class MainActivity extends Activity {
 	protected void init() {
 		m_tgbtn = (ToggleButton) this.findViewById(R.id.btn_enable_disable);
 		m_chkbx = (CheckBox) this.findViewById(R.id.chkbtn_enable);
+		// wifi
+		m_tgbtn_wifi = (ToggleButton) this.findViewById(R.id.btn_wifi_enable_disable);
+		m_chkbx_wifi = (CheckBox) this.findViewById(R.id.chkbtn_wifi);
+
 		m_msg = (TextView) this.findViewById(R.id.login_msg);
 		m_username = (EditText) this.findViewById(R.id.txt_username);
 		m_password = (EditText) this.findViewById(R.id.txt_passwd);
@@ -247,11 +279,11 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onStart();
 
-		scheduleTask();// 后台任务执行
+		scheduleTask(TASK_LOGIN);// 后台任务执行
 	}
 
-	protected void scheduleTask() {
-		mTimer.schedule(new TimerTaskBackgroud(), TASK_DELAY); // 后台任务执行
+	protected void scheduleTask(int type) {
+		mTimer.schedule(new TimerTaskBackgroud( type ), TASK_DELAY); // 后台任务执行
 	}
 
 	@Override
@@ -298,6 +330,23 @@ public class MainActivity extends Activity {
 	}
 
 	/**
+	 * 切换Wifi状态
+	 */
+	protected void onClickWifi() {
+
+		m_tgbtn_wifi.setChecked(!bWifiEnable);
+		m_chkbx_wifi.setChecked(!bWifiEnable);
+
+		if (bWifiEnable) {
+			m_msg.setText(R.string.msg_wifi_change_off);
+		} else {
+			m_msg.setText(R.string.msg_wifi_change_on);
+		}
+
+		scheduleTask(TASK_WIFI);
+	}
+
+	/**
 	 * 
 	 * @param v
 	 */
@@ -325,7 +374,7 @@ public class MainActivity extends Activity {
 			m_msg.setText(R.string.msg_login);
 		}
 
-		scheduleTask(); // 后台任务执行
+		scheduleTask(TASK_LOGIN); // 后台任务执行
 	}
 
 	/**
@@ -375,6 +424,13 @@ public class MainActivity extends Activity {
 	}
 
 	/**
+	 * 切换Wifi状态
+	 */
+	protected void changeWifi() {
+		AuthUtil.changeWifiState(this, !bWifiEnable);
+	}
+
+	/**
 	 * 检查网络是否可用
 	 */
 	protected void checkNetwork() {
@@ -404,6 +460,11 @@ public class MainActivity extends Activity {
 	 */
 	protected void updateUI() {
 		StringBuffer sb = new StringBuffer();
+
+		// wifi
+		bWifiEnable = AuthUtil.isWifiEnable(this);
+		m_tgbtn_wifi.setChecked(bWifiEnable);
+		m_chkbx_wifi.setChecked(bWifiEnable);
 
 		if (!bWifiEnable) {// wifi状态
 			sb.append(this.getString(R.string.msg_wifi_fail));
@@ -437,6 +498,7 @@ public class MainActivity extends Activity {
 		// 更新界面
 		m_username.setText(userName);
 		m_password.setText(passWord);
+
 		if ((userName.length() == 0) || (passWord.length() == 0)) {
 			bEnable = false;
 		} else {
@@ -444,6 +506,11 @@ public class MainActivity extends Activity {
 		}
 		m_tgbtn.setChecked(bEnable);
 		m_chkbx.setChecked(bEnable);
+
+		// wifi
+		bWifiEnable = AuthUtil.isWifiEnable(this);
+		m_tgbtn_wifi.setChecked(bWifiEnable);
+		m_chkbx_wifi.setChecked(bWifiEnable);
 	}
 
 	/**
@@ -472,11 +539,24 @@ public class MainActivity extends Activity {
 	 * 
 	 */
 	class TimerTaskBackgroud extends TimerTask {
-
+		
+		int type;
+		public TimerTaskBackgroud(int t){
+			this.type = t;
+		}
+		
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			checkNetwork(); // 检查网络, 并根据情况自动登录
+
+			if ((type & TASK_LOGIN) != 0) {
+				checkNetwork(); // 检查网络, 并根据情况自动登录
+
+			} else if ((type & TASK_WIFI) != 0) {
+				changeWifi();
+			} else if ((type & TASK_UPDATE_UI) != 0) {
+
+			}
 
 			mHandler.sendEmptyMessage(UPDATE_UI);
 		}
