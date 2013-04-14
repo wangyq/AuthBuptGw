@@ -2,13 +2,9 @@ package com.bnrc.authbuptgw;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.bnrc.authbuptgw.util.HttpRequest;
 import com.bnrc.authbuptgw.util.HttpResponse;
 import com.bnrc.authbuptgw.util.HttpUtil;
-
 import android.app.Activity;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
@@ -21,11 +17,11 @@ import android.net.wifi.WifiManager;
  * 
  */
 public class AuthUtil {
-	private static char md5Chars[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+	private static char md5Chars[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 	/**
 	 * 生成登录请求发送到服务器 curl --silent -d
-	 * "DDDDD=$USERNAME&upass=$upass&R1=0&R2=0&para=00&0MKKey=123456"
+	 * "DDDDD=$USERNAME&upass=$upass&R1=0&R2=1&para=00&0MKKey=123456"
 	 * "$URL_LOGIN"`
 	 * 
 	 * @param user
@@ -42,18 +38,19 @@ public class AuthUtil {
 		request.addParam("DDDDD", user);
 		request.addParam("upass", genPasswd(passwd));
 		request.addParam("R1", "0");
-		request.addParam("R2", "0");
+		request.addParam("R2", "1");
 		request.addParam("para", "00");
 		request.addParam("0MKKey", "123456");
 		
 		request.addHeaderField("Cache-Control: no-cache");
-		//request.addHeaderField("Connection: keep-alive");
-		//request.addHeaderField("Accept-Language: zh-CN");
-		//request.addHeaderField("Accept-Charset: GBK,utf-8");
+		request.addHeaderField("Connection: keep-alive");
+		request.addHeaderField("Accept-Language: zh-CN");
+		request.addHeaderField("Accept-Charset: GBK,utf-8");
 
+		//HttpResponse response = HttpUtil.sendAndGetContent(request);
 		HttpResponse response = HttpUtil.send(request);
 		
-		response.printHeader();
+		//response.print();
 		
 		return "200".equals(response.getStatusCode());
 	}
@@ -99,6 +96,25 @@ public class AuthUtil {
 	 * @param passwd
 	 * @return
 	 */
+	public static boolean logout(String strUrl, String user, String passwd) {
+		if ((strUrl.length() == 0) || (user.length() == 0) || (passwd.length() == 0)) {
+			return false;
+		}
+		
+		HttpRequest request = new HttpRequest(strUrl, "GET");  //GET 方法
+		
+		request.addHeaderField("Cache-Control: no-cache");
+		request.addHeaderField("Connection: keep-alive");
+		request.addHeaderField("Accept-Language: zh-CN");
+		request.addHeaderField("Accept-Charset: GBK,utf-8");
+
+		//HttpResponse response = HttpUtil.sendAndGetContent(request);
+		HttpResponse response = HttpUtil.send(request);
+		
+		//response.print();
+		
+		return "200".equals(response.getStatusCode());
+	}
 	// public static boolean logout(String strUrl, String user, String passwd) {
 	// boolean bOK = false;
 	// HttpURLConnection conn = null;
@@ -263,8 +279,9 @@ public class AuthUtil {
 		// // System.out.println("**** WIFI is off");
 		//
 		// }
-		return true;
-		// return bOK;
+		//return true;
+		
+		return bOK;
 	}
 
 	/**

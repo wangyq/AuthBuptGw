@@ -130,4 +130,8 @@ public class HttpResponse {
         	System.out.println(name + ": " + value);
         }
 	}
+	public void print() {
+		printHeader();
+		System.out.println(content);
+	}
 }

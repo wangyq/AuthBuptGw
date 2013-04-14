@@ -73,12 +73,17 @@ public class HttpRequest {
 				reqStr.append(":" + Url.getPort());
 			}
 			reqStr.append("\r\n");
+			
+			if( headRequest.get("Content-Type") == null ){
+				reqStr.append("Content-Type: application/x-www-form-urlencoded\r\n");  //添加内容类型
+			}
+			
 			reqStr.append("Content-Length: " + strParam.getBytes().length + "\r\n");
 			reqStr.append(strHeadField);
 
 			reqStr.append(strParam);
 		}
-		System.out.println(reqStr.toString());
+		//System.out.println(reqStr.toString());
 		return reqStr.toString();
 	}
 
