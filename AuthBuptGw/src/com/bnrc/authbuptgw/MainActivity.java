@@ -30,6 +30,11 @@ public class MainActivity extends Activity {
 	static final int ANDROID2_2 = 8;
 	
 	/**
+	 * Bupt认证网关的IP地址(Host地址)
+	 */
+	String strBuptGwHost = "";
+	
+	/**
 	 * Android系统版本号
 	 * 2.2  --  8
 	 */
@@ -259,6 +264,19 @@ public class MainActivity extends Activity {
 	}
 
 	/**
+	 * 经查网络是否连上internet
+	 * @return
+	 */
+	protected boolean isNetAvailable(){
+		
+		String strChkUrl = this.getString(R.string.URL_CHECK_NETWORK);
+		String strChkContent = this.getString(R.string.URL_CHECK_CONTENT);
+		
+		return AuthUtil.checkUrl(strChkUrl, strChkContent);
+		
+	}
+	
+	/**
 	 * 检查网络是否可用
 	 */
 	protected void checkNetwork(){
@@ -267,17 +285,8 @@ public class MainActivity extends Activity {
 		
 		if( !bWifiEnable ){
 			m_msg.setText(R.string.msg_wifi_fail); //wifi不可用
-			
 		} else  {//进行网络检查
-			String strChkUrl = this.getString(R.string.URL_CHECK_NETWORK);
-	
-			for( int i=0; i<LOGIN_NUM; i++ ){
-				if( AuthUtil.checkUrl(strChkUrl)) { //测试网络是否连通
-					bNetOK = true;
-					break;
-				}
-				
-			}
+			bNetOK = isNetAvailable();
 			//启用定时器检查结果
 			if( bNetOK ){
 				m_msg.setText(R.string.msg_network_ok);
@@ -296,19 +305,19 @@ public class MainActivity extends Activity {
 		if( !bWifiEnable ){
 			m_msg.setText(R.string.msg_wifi_fail); //wifi不可用
 			
-		} else if ( bEnable && (!bNetOK) ) {//进行登录处理
+		//} else if ( bEnable && (!bNetOK) ) {//进行登录处理
+		} else if ( bEnable ) {//进行登录处理
 			m_msg.setText(R.string.msg_login);
 			
 			String userName = m_username.getText().toString();
 			String passWord = m_password.getText().toString();
 			String strUrl = this.getString(R.string.URL_LOGIN);
-			String strChkUrl = this.getString(R.string.URL_CHECK_NETWORK);
-			
+		
 			//bNetOK = false;
 			
 			for( int i=0; i<LOGIN_NUM; i++ ){
 				AuthUtil.login(strUrl, userName, passWord);  //发送登录请求到服务器
-				if( AuthUtil.checkUrl(strChkUrl)) { //测试网络是否连通
+				if( isNetAvailable() ) { //测试网络是否连通
 					bNetOK = true;
 					break;
 				}
@@ -322,6 +331,8 @@ public class MainActivity extends Activity {
 			}
 		}// end of if
 		
+		//
+		saveData();
 	}
 
 	/**
