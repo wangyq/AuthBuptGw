@@ -14,14 +14,15 @@
     <string  name="btn_quit">退  出</string>
     <string  name="btn_about">关  于</string>
     <string  name="msg_login_ok">登录成功, 互联网访问正常!</string>
-    <string  name="msg_login_fail">登录失败,互联网访问不可用!!!</string>
-    <string  name="msg_wifi_fail">WIFI网络不可用!!</string>
-    <string  name="msg_network_ok">互联网访问正常!!</string>
-    <string  name="msg_network_fail">互联网访问不可用!!</string>
+    <string  name="msg_login_fail">登录失败,互联网访问不可用!</string>
+    <string  name="msg_wifi_fail">WIFI网络不可用!</string>
+    <string  name="msg_network_ok">互联网访问正常!</string>
+    <string  name="msg_network_fail">互联网访问不可用!</string>
     <string  name="msg_login">登录中......</string>
     <string  name="msg_logout">未登录.</string>
     <string  name="URL_LOGIN">http://gw.bupt.edu.cn</string>
     <string  name="URL_LOGOUT">http://gw.bupt.edu.cn/F.htm</string>
     <string  name="URL_CHECK_NETWORK">http://m.baidu.com</string>
+    <string  name="URL_CHECK_CONTENT">京ICP证030173号</string>
 
 </resources>

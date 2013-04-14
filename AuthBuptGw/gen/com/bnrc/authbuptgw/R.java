@@ -44,6 +44,7 @@ public final class R {
         public static final int main=0x7f070000;
     }
     public static final class string {
+        public static final int URL_CHECK_CONTENT=0x7f050016;
         public static final int URL_CHECK_NETWORK=0x7f050015;
         public static final int URL_LOGIN=0x7f050013;
         public static final int URL_LOGOUT=0x7f050014;
