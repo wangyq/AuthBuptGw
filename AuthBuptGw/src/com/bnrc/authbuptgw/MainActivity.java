@@ -1,5 +1,6 @@
 package com.bnrc.authbuptgw;
 
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build.VERSION;
 import java.util.Timer;
@@ -202,12 +203,19 @@ public class MainActivity extends Activity {
 
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+		filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
 		this.registerReceiver(new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, android.content.Intent intent) {// Wifi状态变化
 				// TODO Auto-generated method stub
-
+				 if(intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)){
+					 NetworkInfo info=intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
+						if(info.getState().equals(NetworkInfo.State.CONNECTED) || info.getState().equals(NetworkInfo.State.DISCONNECTED))
+						{//如果连接可用, 或者连接不可用
+							scheduleTask();
+						}
 				scheduleTask(); // 启动后台检查任务
+				 }
 			}
 		}, filter);
 
