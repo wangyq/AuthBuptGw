@@ -238,11 +238,11 @@ public class MainActivity extends Activity {
 																																		// 或者连接不可用
 						scheduleTask(TASK_LOGIN);
 					} else {
-						scheduleTask(TASK_UPDATE_UI);
+						//scheduleTask(TASK_UPDATE_UI);
 					}
 
 				} else if (intent.getAction().equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
-					scheduleTask(TASK_UPDATE_UI);
+					//scheduleTask(TASK_UPDATE_UI);
 				}
 			}
 		}, filter);
@@ -333,17 +333,20 @@ public class MainActivity extends Activity {
 	 * 切换Wifi状态
 	 */
 	protected void onClickWifi() {
-
-		m_tgbtn_wifi.setChecked(!bWifiEnable);
-		m_chkbx_wifi.setChecked(!bWifiEnable);
+		
+		bWifiEnable = !bWifiEnable;
+		
+		m_tgbtn_wifi.setChecked(bWifiEnable);
+		m_chkbx_wifi.setChecked(bWifiEnable);
 
 		if (bWifiEnable) {
-			m_msg.setText(R.string.msg_wifi_change_off);
-		} else {
 			m_msg.setText(R.string.msg_wifi_change_on);
+		} else {
+			m_msg.setText(R.string.msg_wifi_change_off);
 		}
 
-		scheduleTask(TASK_WIFI);
+		//scheduleTask(TASK_WIFI);
+		AuthUtil.changeWifiState(this, bWifiEnable);   //改变wifi状态
 	}
 
 	/**
