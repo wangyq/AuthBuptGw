@@ -515,7 +515,7 @@ public class MainActivity extends Activity {
 			sb.append(this.getString(R.string.msg_login_fail));
 			
 			//延迟登录操作
-			//scheduleTask(TASK_LOGIN, LOGIN_RETRY_DELAY); // 后台任务执行
+			scheduleTask(TASK_LOGIN, LOGIN_RETRY_DELAY); // 后台任务执行
 		}
 
 		m_msg.setText(sb.toString()); // 设置提示信息
