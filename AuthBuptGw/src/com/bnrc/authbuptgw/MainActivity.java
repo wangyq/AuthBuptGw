@@ -463,7 +463,9 @@ public class MainActivity extends Activity {
 		
 		for( int i=0; i<loginRetryNum ; i++ ){
 			AuthUtil.relogin(strUrlRelogin, user, passwd);
-			bOK = AuthUtil.login(strUrl, user, passwd);
+			AuthUtil.login(strUrl, user, passwd);
+			
+			bOK = isNetAvailable();    //检查网络是否可用
 			if( bOK ) break;  //登录成功则退出。
 			
 			// ... 这里需要延时吗?
