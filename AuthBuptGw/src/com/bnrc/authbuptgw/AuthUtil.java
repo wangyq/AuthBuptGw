@@ -102,7 +102,7 @@ public class AuthUtil {
 		}
 		
 		HttpRequest request = new HttpRequest(strUrl, "GET");  //GET 方法
-		
+
 		request.addHeaderField("Cache-Control: no-cache");
 		request.addHeaderField("Connection: keep-alive");
 		request.addHeaderField("Accept-Language: zh-CN");
@@ -116,12 +116,22 @@ public class AuthUtil {
 		return "200".equals(response.getStatusCode());
 	}
 	
-	public static boolean disconn(String strUrl){
-		if ( strUrl.length() == 0 ) {
+	/**
+	 * 重新登录, POST 方法: 
+	 * DDDDD=username&upass=passwd&AMKKey=
+	 * @param strUrl
+	 * @return
+	 */
+	public static boolean relogin(String strUrl, String user, String passwd){
+		if ((strUrl.length() == 0) || (user.length() == 0) || (passwd.length() == 0)) {
 			return false;
 		}
 		
-		HttpRequest request = new HttpRequest(strUrl, "GET");  //GET 方法
+		HttpRequest request = new HttpRequest(strUrl, "POST");  //POST 方法
+		
+		request.addParam("DDDDD", user);
+		request.addParam("upass", passwd);
+		request.addParam("AMKKey", "");
 		
 		request.addHeaderField("Cache-Control: no-cache");
 		request.addHeaderField("Connection: keep-alive");

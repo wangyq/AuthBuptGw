@@ -51,9 +51,9 @@ public final class R {
         public static final int LOGIN_RETRY_NUMBER=0x7f050017;
         public static final int URL_CHECK_CONTENT=0x7f05001c;
         public static final int URL_CHECK_NETWORK=0x7f05001b;
-        public static final int URL_DISCONN=0x7f05001a;
         public static final int URL_LOGIN=0x7f050018;
         public static final int URL_LOGOUT=0x7f050019;
+        public static final int URL_RELOGIN=0x7f05001a;
         public static final int action_settings=0x7f050005;
         public static final int app_name=0x7f050000;
         public static final int btn_about=0x7f05000d;

@@ -450,7 +450,7 @@ public class MainActivity extends Activity {
 		String user = m_username.getText().toString();
 		String passwd = m_password.getText().toString();
 		String strUrl = this.getString(R.string.URL_LOGIN);
-		String strUrlDisconn = this.getString(R.string.URL_DISCONN);
+		String strUrlRelogin = this.getString(R.string.URL_RELOGIN);
 		
 		//登录的重试次数
 		int loginRetryNum = Integer.parseInt( this.getString(R.string.LOGIN_RETRY_NUMBER) );
@@ -459,9 +459,10 @@ public class MainActivity extends Activity {
 		}
 		
 		for( int i=0; i<loginRetryNum ; i++ ){
+			AuthUtil.relogin(strUrlRelogin, user, passwd);
 			bOK = AuthUtil.login(strUrl, user, passwd);
 			if( bOK ) break;  //登录成功则退出。
-			AuthUtil.disconn(strUrlDisconn);   //断线
+			
 			// ... 这里需要延时吗?
 			
 		}
@@ -604,14 +605,17 @@ public class MainActivity extends Activity {
 
 			if ((type & TASK_LOGIN) != 0) {
 				checkNetworkAndLogin(); // 检查网络, 并根据情况自动登录
-
+				
+				mHandler.sendEmptyMessage(UPDATE_UI);  // update ui
+				
 			} else if ((type & TASK_WIFI) != 0) {
 				changeWifi();
+				
 			} else if ((type & TASK_UPDATE_UI) != 0) {
 
 			}
 
-			mHandler.sendEmptyMessage(UPDATE_UI);
+			
 		}
 	}
 
