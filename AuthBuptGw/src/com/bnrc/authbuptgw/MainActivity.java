@@ -55,10 +55,14 @@ public class MainActivity extends Activity {
 	int sysVersion = 8;
 
 	static final int UPDATE_UI = 0;
-	static final int TASK_DELAY = 1 * 1000; // Seconds;
+	static final int TASK_DELAY = 1 ; // Seconds;
+	
 	static final int TASK_LOGIN = 1;
 	static final int TASK_WIFI = 2;
 	static final int TASK_UPDATE_UI = 4;
+	static final int LOGIN_RETRY_DELAY = 3 ; // Seconds; 重试登录的延迟时间
+	static final int LOGIN_RETRY_MAX_NUM = 20;
+	static final int LOGIN_RETRY_DEFAULT_NUM = 3;
 
 	private Timer mTimer;
 	private Handler mHandler;
@@ -109,16 +113,7 @@ public class MainActivity extends Activity {
 
 		mTimer = new Timer();
 
-		mHandler = new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				switch (msg.what) {
-				case UPDATE_UI:
-					updateUI(); // 更新界面信息
-					break;
-				}
-			}
-		};
+		mHandler = new MyEventHandler(this);  //事件处理类
 	}
 
 	protected void destroyTimer() {
@@ -282,10 +277,26 @@ public class MainActivity extends Activity {
 		scheduleTask(TASK_LOGIN);// 后台任务执行
 	}
 
+	/**
+	 * 调度后台任务执行
+	 * @param type
+	 */
 	protected void scheduleTask(int type) {
-		mTimer.schedule(new TimerTaskBackgroud( type ), TASK_DELAY); // 后台任务执行
+		scheduleTask(type, TASK_DELAY); // 后台任务执行
 	}
-
+	
+	/**
+	 * 延时 delay 秒调度后台任务执行
+	 * @param type - 任务类型
+	 * @param delay - 延迟时间, 单位: 秒
+	 */
+	protected void scheduleTask(int type, int delay) {
+		if( delay <0 ) {
+			delay = TASK_DELAY;
+		}
+		mTimer.schedule(new TimerTaskBackgroud( type ), delay *1000 ); // 后台任务执行
+	}
+	
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
@@ -431,24 +442,41 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * 检查网络是否可用
+	 * 执行登录动作, 成功返回true， 失败返回false
+	 * @return
 	 */
-	protected void checkNetwork() {
+	protected boolean login(){
+		boolean bOK = false;
+		String user = m_username.getText().toString();
+		String passwd = m_password.getText().toString();
+		String strUrl = this.getString(R.string.URL_LOGIN);
+		String strUrlDisconn = this.getString(R.string.URL_DISCONN);
+		
+		//登录的重试次数
+		int loginRetryNum = Integer.parseInt( this.getString(R.string.LOGIN_RETRY_NUMBER) );
+		if( loginRetryNum <=0 || loginRetryNum >= LOGIN_RETRY_MAX_NUM  ){  //有效性检查, 避免程序死循环!
+			loginRetryNum = LOGIN_RETRY_DEFAULT_NUM;
+		}
+		
+		for( int i=0; i<loginRetryNum ; i++ ){
+			bOK = AuthUtil.login(strUrl, user, passwd);
+			if( bOK ) break;  //登录成功则退出。
+			AuthUtil.disconn(strUrlDisconn);   //断线
+			// ... 这里需要延时吗?
+			
+		}
+		return bOK;
+	}
+	
+	/**
+	 * 检查网络是否可用, 并根据情况进行登录
+	 */
+	protected void checkNetworkAndLogin() {
 
 		bWifiEnable = AuthUtil.isWifiEnable(this); // 检查Wifi网络
 
-		if (bWifiEnable) { // 检查是否可登录
-			String user = m_username.getText().toString();
-			String passwd = m_password.getText().toString();
-			String strUrl = this.getString(R.string.URL_LOGIN);
-			String strUrlLogout = this.getString(R.string.URL_LOGOUT);
-
-			if (bEnable) {
-				bLoginOK = AuthUtil.login(strUrl, user, passwd);
-			} else {
-				// bLoginOK = false;
-				// AuthUtil.logout(strUrlLogout, user, passwd); //注销
-			}
+		if (bWifiEnable && bEnable) { // 检查是否可登录
+			bLoginOK = login();   //进行登录操作
 		}
 
 		bNetOK = isNetAvailable(); // 测试网络连通性
@@ -479,6 +507,9 @@ public class MainActivity extends Activity {
 			sb.append(this.getString(R.string.msg_login_ok));
 		} else if (bWifiEnable && !bNetOK) { // Wifi可用并且不能联网
 			sb.append(this.getString(R.string.msg_login_fail));
+			
+			//延迟登录操作
+			//scheduleTask(TASK_LOGIN, LOGIN_RETRY_DELAY); // 后台任务执行
 		}
 
 		m_msg.setText(sb.toString()); // 设置提示信息
@@ -533,6 +564,28 @@ public class MainActivity extends Activity {
 	}
 
 	/**
+	 * 
+	 * @author wang
+	 *
+	 */
+	static class MyEventHandler extends Handler{
+		
+		MainActivity activity = null;
+		
+		public MyEventHandler(MainActivity a){
+			this.activity = a;
+		}
+		
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case UPDATE_UI:
+				activity.updateUI(); // 更新界面信息
+				break;
+			}
+		}
+	}
+	/**
 	 * Work thread and It doesn't work updating the UI inside a timer.
 	 * 
 	 * @author wang
@@ -550,7 +603,7 @@ public class MainActivity extends Activity {
 			// TODO Auto-generated method stub
 
 			if ((type & TASK_LOGIN) != 0) {
-				checkNetwork(); // 检查网络, 并根据情况自动登录
+				checkNetworkAndLogin(); // 检查网络, 并根据情况自动登录
 
 			} else if ((type & TASK_WIFI) != 0) {
 				changeWifi();

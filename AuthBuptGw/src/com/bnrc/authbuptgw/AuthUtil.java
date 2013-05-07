@@ -115,6 +115,27 @@ public class AuthUtil {
 		
 		return "200".equals(response.getStatusCode());
 	}
+	
+	public static boolean disconn(String strUrl){
+		if ( strUrl.length() == 0 ) {
+			return false;
+		}
+		
+		HttpRequest request = new HttpRequest(strUrl, "GET");  //GET 方法
+		
+		request.addHeaderField("Cache-Control: no-cache");
+		request.addHeaderField("Connection: keep-alive");
+		request.addHeaderField("Accept-Language: zh-CN");
+		request.addHeaderField("Accept-Charset: GBK,utf-8");
+
+		//HttpResponse response = HttpUtil.sendAndGetContent(request);
+		HttpResponse response = HttpUtil.send(request);
+		
+		//response.print();
+		
+		return "200".equals(response.getStatusCode());
+	}
+	
 	// public static boolean logout(String strUrl, String user, String passwd) {
 	// boolean bOK = false;
 	// HttpURLConnection conn = null;

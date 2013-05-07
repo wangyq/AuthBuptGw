@@ -48,10 +48,12 @@ public final class R {
         public static final int main=0x7f070001;
     }
     public static final class string {
-        public static final int URL_CHECK_CONTENT=0x7f05001a;
-        public static final int URL_CHECK_NETWORK=0x7f050019;
-        public static final int URL_LOGIN=0x7f050017;
-        public static final int URL_LOGOUT=0x7f050018;
+        public static final int LOGIN_RETRY_NUMBER=0x7f050017;
+        public static final int URL_CHECK_CONTENT=0x7f05001c;
+        public static final int URL_CHECK_NETWORK=0x7f05001b;
+        public static final int URL_DISCONN=0x7f05001a;
+        public static final int URL_LOGIN=0x7f050018;
+        public static final int URL_LOGOUT=0x7f050019;
         public static final int action_settings=0x7f050005;
         public static final int app_name=0x7f050000;
         public static final int btn_about=0x7f05000d;
@@ -72,8 +74,8 @@ public final class R {
         public static final int msg_wifi_change_on=0x7f050011;
         public static final int msg_wifi_fail=0x7f050010;
         public static final int pref_name=0x7f050004;
-        public static final int title_activity_about=0x7f05001b;
-        public static final int txt_about=0x7f05001c;
+        public static final int title_activity_about=0x7f05001d;
+        public static final int txt_about=0x7f05001e;
         public static final int txt_line=0x7f050003;
         public static final int txt_passwd=0x7f050002;
         public static final int txt_username=0x7f050001;
