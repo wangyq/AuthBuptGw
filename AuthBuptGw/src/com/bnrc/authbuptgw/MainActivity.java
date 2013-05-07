@@ -233,11 +233,11 @@ public class MainActivity extends Activity {
 																																		// 或者连接不可用
 						scheduleTask(TASK_LOGIN);
 					} else {
-						scheduleTask(TASK_UPDATE_UI);
+						//scheduleTask(TASK_UPDATE_UI);
 					}
 
 				} else if (intent.getAction().equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
-					scheduleTask(TASK_UPDATE_UI);
+					//scheduleTask(TASK_UPDATE_UI);
 				}
 			}
 		}, filter);
