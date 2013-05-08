@@ -461,10 +461,13 @@ public class MainActivity extends Activity {
 			loginRetryNum = LOGIN_RETRY_DEFAULT_NUM;
 		}
 		
-		for( int i=0; i<loginRetryNum ; i++ ){
-			AuthUtil.relogin(strUrlRelogin, user, passwd);
-			AuthUtil.login(strUrl, user, passwd);
+		for( int i=0; i<loginRetryNum ; i++ ){  //反复登录直到成功, 或者直到最大尝试次数为止
 			
+			AuthUtil.login(strUrl, user, passwd);  //常规登录方式
+			bOK = isNetAvailable();    //检查网络是否可用
+			if( bOK ) break;  //登录成功则退出。
+			
+			AuthUtil.relogin(strUrlRelogin, user, passwd);   //断开再登录方式
 			bOK = isNetAvailable();    //检查网络是否可用
 			if( bOK ) break;  //登录成功则退出。
 			
@@ -483,12 +486,12 @@ public class MainActivity extends Activity {
 
 		bNetOK = isNetAvailable(); // 测试网络连通性
 		
-		//if ( bWifiEnable && bEnable && !bNetOK ) { // 检查是否可登录, 并且internet不可用
-		if ( bWifiEnable && bEnable ) { // 检查是否可登录, 并且internet不可用
+		if ( bWifiEnable && bEnable && !bNetOK ) { // 检查是否可登录, 并且internet不可用
+		//if ( bWifiEnable && bEnable ) { // 检查是否可登录, 并且internet不可用
 			bLoginOK = login();   //进行登录操作
 		}
 
-		bNetOK = isNetAvailable(); // 测试网络连通性
+		bNetOK = isNetAvailable(); // 登录之后，测试网络连通性
 
 	}
 
@@ -515,10 +518,16 @@ public class MainActivity extends Activity {
 		if (bWifiEnable && bLoginOK) { // Wifi可用, 联网正常
 			sb.append(this.getString(R.string.msg_login_ok));
 		} else if (bWifiEnable && !bNetOK) { // Wifi可用并且不能联网
-			sb.append(this.getString(R.string.msg_login_fail));
 			
-			//延迟登录操作
-			scheduleTask(TASK_LOGIN, LOGIN_RETRY_DELAY); // 后台任务执行
+			if( bEnable ){//启用登录功能
+				sb.append(this.getString(R.string.msg_login_fail));  //登录失败
+				
+				//延迟登录操作
+				scheduleTask(TASK_LOGIN, LOGIN_RETRY_DELAY); // 后台任务执行
+				
+			} else {
+				sb.append(this.getString(R.string.msg_login_disabled)); //登录未启用
+			}
 		}
 
 		m_msg.setText(sb.toString()); // 设置提示信息
