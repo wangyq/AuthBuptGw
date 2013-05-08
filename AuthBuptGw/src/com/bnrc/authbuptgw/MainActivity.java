@@ -481,7 +481,10 @@ public class MainActivity extends Activity {
 
 		bWifiEnable = AuthUtil.isWifiEnable(this); // 检查Wifi网络
 
-		if (bWifiEnable && bEnable) { // 检查是否可登录
+		bNetOK = isNetAvailable(); // 测试网络连通性
+		
+		//if ( bWifiEnable && bEnable && !bNetOK ) { // 检查是否可登录, 并且internet不可用
+		if ( bWifiEnable && bEnable ) { // 检查是否可登录, 并且internet不可用
 			bLoginOK = login();   //进行登录操作
 		}
 
