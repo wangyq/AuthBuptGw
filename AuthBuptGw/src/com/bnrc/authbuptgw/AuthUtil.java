@@ -199,6 +199,25 @@ public class AuthUtil {
 		return "200".equals(response.getStatusCode());
 	}
 
+	/**
+	 * 连接给定的url, 并检索其内容，判断网络是否连通。
+	 * @param strUrls
+	 * @param contents
+	 * @return
+	 */
+	public static boolean checkUrl(String[] strUrls, String[] contents){
+		boolean bOK = false;
+		if( (strUrls==null) || (strUrls.length ==0) ){
+			return bOK;
+		}
+		//逐个检查url是否可连通。
+		for (int i=0; i<strUrls.length; i++ ) {
+			bOK = checkUrl(strUrls[i], contents[i]);
+			if( bOK ) break;   //如果连通，这后面的url不需要在检查。
+		}
+				
+		return bOK;
+	}
 	// public static boolean checkUrl(String strUrl, String content) {
 	// boolean bOK = false;
 	//

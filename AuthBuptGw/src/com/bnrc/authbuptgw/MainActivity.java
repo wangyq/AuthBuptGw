@@ -3,6 +3,8 @@ package com.bnrc.authbuptgw;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build.VERSION;
+
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import android.os.Bundle;
@@ -424,16 +426,22 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * 经查网络是否连上internet
+	 * 经查网络是否连上Internet
 	 * 
-	 * @return
+	 * @return true-when Internet is OK, false otherwise.
 	 */
 	protected boolean isNetAvailable() {
 
-		String strChkUrl = this.getString(R.string.URL_CHECK_NETWORK);
-		String strChkContent = this.getString(R.string.URL_CHECK_CONTENT);
+		String[] strUrls = new String[2];
+		String[] strContents = new String[2];
+		
+		strUrls[0] = this.getString(R.string.URL_CHECK_NETWORK);
+		strContents[0] = this.getString(R.string.URL_CHECK_CONTENT);
 
-		return AuthUtil.checkUrl(strChkUrl, strChkContent);
+		strUrls[1] = this.getString(R.string.URL_CHECK_NETWORK1);
+		strContents[1] = this.getString(R.string.URL_CHECK_CONTENT1);
+
+		return AuthUtil.checkUrl(strUrls, strContents);
 
 	}
 
