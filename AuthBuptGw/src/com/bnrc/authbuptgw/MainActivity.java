@@ -43,7 +43,9 @@ public class MainActivity extends Activity {
 	static final String PASSWORD = "PASSWORD";
 	static final String AUTOLOGIN = "AUTOLOGIN";
 
-	static final int LOGIN_NUM = 3;
+	/**
+	 * Android 2.2 的版本号 = 8
+	 */
 	static final int ANDROID2_2 = 8;
 
 	/**
@@ -56,14 +58,35 @@ public class MainActivity extends Activity {
 	 */
 	int sysVersion = 8;
 
+	/**
+	 * 任务向主线程(UI线程)发送的更新消息
+	 */
 	static final int UPDATE_UI = 0;
+	
+	/**
+	 * 调度任务执行时，默认的调度延迟时间。单位: 秒
+	 */
 	static final int TASK_DELAY = 1 ; // Seconds;
 	
+	/**
+	 * 调度任务的执行任务类型。
+	 */
 	static final int TASK_LOGIN = 1;
 	static final int TASK_WIFI = 2;
 	static final int TASK_UPDATE_UI = 4;
-	static final int LOGIN_RETRY_DELAY = 3 ; // Seconds; 重试登录的延迟时间
+	/**
+	 * 登录失败后，尝试重新登录的延迟时间. 单位 : 秒
+	 */
+	static final int LOGIN_RETRY_DELAY = 3 ; 
+	
+	/**
+	 * 每次登录时，反复登录的最大次数
+	 */
 	static final int LOGIN_RETRY_MAX_NUM = 20;
+	
+	/**
+	 * 每次登录时，反复登录的默认次数
+	 */
 	static final int LOGIN_RETRY_DEFAULT_NUM = 3;
 
 	private Timer mTimer;
@@ -262,7 +285,7 @@ public class MainActivity extends Activity {
 
 		// 装入数据
 		loadData();
-
+		
 		initEvent(); // 初始化事件处理
 		initTimerAndHandler(); // 初始化定时器
 
@@ -276,6 +299,9 @@ public class MainActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onStart();
 
+		// 装入数据
+		loadData();		
+		
 		scheduleTask(TASK_LOGIN);// 后台任务执行
 	}
 
