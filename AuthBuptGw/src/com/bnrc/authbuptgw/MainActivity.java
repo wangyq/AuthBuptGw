@@ -419,7 +419,11 @@ public class MainActivity extends Activity {
 		// 保存应用数据
 		saveData();
 
-		m_msg.setText(R.string.msg_login);
+		if( bEnable ){
+			m_msg.setText(R.string.msg_login); //开启登录中
+		} else {
+			m_msg.setText(R.string.msg_login_disabled); //自动登录未启用。
+		}
 		
 		scheduleTask(TASK_LOGIN); // 后台任务执行
 	}
@@ -536,6 +540,7 @@ public class MainActivity extends Activity {
 		StringBuffer sb = new StringBuffer();
 
 		//System.out.println("updateUI: bEnable =" + bEnable);
+		//sb.append("bEnable =" + bEnable );
 		
 		// wifi
 		bWifiEnable = AuthUtil.isWifiEnable(this);
