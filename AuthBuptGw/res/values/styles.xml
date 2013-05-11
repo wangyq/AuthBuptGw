@@ -18,5 +18,5 @@
     </style>
 
     <!--  Backcolor of main activity -->
-    <drawable name="bkcolor">#81F79F</drawable>
+    <drawable name="bkcolor">#89CEB4</drawable>
 </resources>

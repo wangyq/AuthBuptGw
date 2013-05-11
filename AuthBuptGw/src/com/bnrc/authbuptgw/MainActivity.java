@@ -291,7 +291,7 @@ public class MainActivity extends Activity {
 		m_password = (EditText) this.findViewById(R.id.txt_passwd);
 
 		// 装入数据
-		loadData();
+		//loadData();
 		
 		initEvent(); // 初始化事件处理
 		initTimerAndHandler(); // 初始化定时器
@@ -338,6 +338,22 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 
 		destroyTimer();
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
+		
+		//bEnable = savedInstanceState.getBoolean(AUTOLOGIN);  //恢复变量值
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		
+		//outState.putBoolean(AUTOLOGIN, bEnable); //保存变量值
 	}
 
 	/**
@@ -396,6 +412,8 @@ public class MainActivity extends Activity {
 		//延迟调度执行登录操作。
 		scheduleTask(TASK_LOGIN, WIFI_CLICK_LOGIN_DELAY);
 	}
+
+
 
 	/**
 	 * 启用禁用登录功能。
