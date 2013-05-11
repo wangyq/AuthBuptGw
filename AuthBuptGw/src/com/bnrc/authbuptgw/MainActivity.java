@@ -69,15 +69,21 @@ public class MainActivity extends Activity {
 	static final int TASK_DELAY = 1 ; // Seconds;
 	
 	/**
+	 * 登录失败后，尝试重新登录的延迟时间. 单位 : 秒
+	 */
+	static final int LOGIN_RETRY_DELAY = 3 ; 
+	
+	/**
+	 * 点击wifi按钮后， 执行登录操作的延迟时间。 避免wifi状态后界面无响应。
+	 */
+	static final int WIFI_CLICK_LOGIN_DELAY = 6;
+	
+	/**
 	 * 调度任务的执行任务类型。
 	 */
 	static final int TASK_LOGIN = 1;
 	static final int TASK_WIFI = 2;
 	static final int TASK_UPDATE_UI = 4;
-	/**
-	 * 登录失败后，尝试重新登录的延迟时间. 单位 : 秒
-	 */
-	static final int LOGIN_RETRY_DELAY = 3 ; 
 	
 	/**
 	 * 每次登录时，反复登录的最大次数
@@ -164,7 +170,16 @@ public class MainActivity extends Activity {
 			}
 
 		});
+		((CheckBox) this.findViewById(R.id.chkbtn_enable)).setOnClickListener(new View.OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				onClickEnableDisable(v);
+			}
+
+		});
+		
 		((Button) this.findViewById(R.id.btn_about)).setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -205,15 +220,7 @@ public class MainActivity extends Activity {
 		//
 		// });
 
-		((CheckBox) this.findViewById(R.id.chkbtn_enable)).setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				onClickCheckEnable(v);
-			}
-
-		});
 		// 用户-输入框
 		((EditText) this.findViewById(R.id.txt_username)).addTextChangedListener(new TextWatcher() {
 			@Override
@@ -384,38 +391,36 @@ public class MainActivity extends Activity {
 			m_msg.setText(R.string.msg_wifi_change_off);
 		}
 
-		//scheduleTask(TASK_WIFI);
 		AuthUtil.changeWifiState(this, bWifiEnable);   //改变wifi状态
+		
+		//延迟调度执行登录操作。
+		scheduleTask(TASK_LOGIN, WIFI_CLICK_LOGIN_DELAY);
 	}
 
 	/**
-	 * 
+	 * 启用禁用登录功能。
 	 * @param v
 	 */
 	protected void onClickEnableDisable(View v) {
+		bEnable = !bEnable; // 切换状态
+		
+		//同步改变2个控件状态
+		m_chkbx.setChecked(bEnable); // 设置状态为不启用
+		m_tgbtn.setChecked(bEnable); // 设置状态为不启用
+		
 		doLogin();
 	}
 
 	/**
 	 * 
-	 * @param v
 	 */
-	protected void onClickCheckEnable(View v) {
-		doLogin();
-	}
-
 	protected void doLogin() {
-		bEnable = !bEnable; // 切换状态
-		m_tgbtn.setChecked(bEnable);
-		m_chkbx.setChecked(bEnable);
 
 		// 保存应用数据
 		saveData();
 
-		if (bEnable && bWifiEnable) {
-			m_msg.setText(R.string.msg_login);
-		}
-
+		m_msg.setText(R.string.msg_login);
+		
 		scheduleTask(TASK_LOGIN); // 后台任务执行
 	}
 
@@ -458,15 +463,9 @@ public class MainActivity extends Activity {
 	 */
 	protected boolean isNetAvailable() {
 
-		String[] strUrls = new String[2];
-		String[] strContents = new String[2];
+		String[] strUrls = new String[]{this.getString(R.string.URL_CHECK_NETWORK), this.getString(R.string.URL_CHECK_NETWORK1)};
+		String[] strContents = new String[]{this.getString(R.string.URL_CHECK_CONTENT),this.getString(R.string.URL_CHECK_CONTENT1)};
 		
-		strUrls[0] = this.getString(R.string.URL_CHECK_NETWORK);
-		strContents[0] = this.getString(R.string.URL_CHECK_CONTENT);
-
-		strUrls[1] = this.getString(R.string.URL_CHECK_NETWORK1);
-		strContents[1] = this.getString(R.string.URL_CHECK_CONTENT1);
-
 		return AuthUtil.checkUrl(strUrls, strContents);
 
 	}
@@ -533,8 +532,11 @@ public class MainActivity extends Activity {
 	 * 更新界面提示信息
 	 */
 	protected void updateUI() {
+		
 		StringBuffer sb = new StringBuffer();
 
+		//System.out.println("updateUI: bEnable =" + bEnable);
+		
 		// wifi
 		bWifiEnable = AuthUtil.isWifiEnable(this);
 		m_tgbtn_wifi.setChecked(bWifiEnable);
@@ -576,7 +578,7 @@ public class MainActivity extends Activity {
 		String passWord = myPref.getString(PASSWORD, "");
 
 		// bEnable = myPref.getBoolean(AUTOLOGIN, false);
-		// System.out.println("load: bEnable =" + bEnable);
+		//System.out.println("load: bEnable =" + bEnable);
 
 		// 更新界面
 		m_username.setText(userName);
@@ -665,7 +667,6 @@ public class MainActivity extends Activity {
 			} else if ((type & TASK_UPDATE_UI) != 0) {
 
 			}
-
 			
 		}
 	}

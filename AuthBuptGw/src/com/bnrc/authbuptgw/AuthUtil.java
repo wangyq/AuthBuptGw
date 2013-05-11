@@ -328,15 +328,14 @@ public class AuthUtil {
 		WifiManager wm = (WifiManager) activitiy.getSystemService(Context.WIFI_SERVICE);
 		bOK = (wm.getWifiState() == WifiManager.WIFI_STATE_ENABLED);
 
-		// WifiInfo wifiInfo = mWifiManager.getConnectionInfo();
-		// int ipAddress = (wifiInfo == null ? 0 : wifiInfo.getIpAddress());
-		// if ( mWifiManager.isWifiEnabled() && ipAddress != 0 ) {
-		// // System.out.println("**** WIFI is on");
-		// bOK = true;
-		// } else {
-		// // System.out.println("**** WIFI is off");
-		//
-		// }
+		 WifiInfo wifiInfo = wm.getConnectionInfo();
+		 int ipAddress = (wifiInfo == null ? 0 : wifiInfo.getIpAddress());
+		 if ( wm.isWifiEnabled() && ipAddress != 0 ) {
+			 // System.out.println("**** WIFI is on");
+			 bOK = true;
+		 } else {
+			 // System.out.println("**** WIFI is off");
+		 }
 		//return true;
 		
 		return bOK;
