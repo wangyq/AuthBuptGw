@@ -23,6 +23,9 @@ public final class R {
     }
     public static final class drawable {
         public static final int bk=0x7f020000;
+        /**   Backcolor of main activity 
+         */
+        public static final int bkcolor=0x7f020002;
         public static final int ic=0x7f020001;
     }
     public static final class id {
