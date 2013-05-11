@@ -22,7 +22,7 @@ public final class R {
         public static final int txt_size=0x7f040002;
     }
     public static final class drawable {
-        public static final int bk=0x7f020000;
+        public static final int background_shape=0x7f020000;
         /**   Backcolor of main activity 
          */
         public static final int bkcolor=0x7f020002;
