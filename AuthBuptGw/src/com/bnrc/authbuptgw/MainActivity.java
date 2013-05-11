@@ -550,13 +550,13 @@ public class MainActivity extends Activity {
 		if (!bWifiEnable) {// wifi状态
 			sb.append(this.getString(R.string.msg_wifi_fail));
 		}
-		if (bNetOK) {
+		if (bNetOK ) { //
 			sb.append(this.getString(R.string.msg_network_ok));
 		} else if (bWifiEnable) {
 			sb.append(this.getString(R.string.msg_network_fail));
 		}
 
-		if (bWifiEnable && bLoginOK) { // Wifi可用, 联网正常
+		if (bWifiEnable && bEnable && bLoginOK) { // Wifi可用, 联网正常, 启用登录
 			sb.append(this.getString(R.string.msg_login_ok));
 		} else if (bWifiEnable && !bNetOK) { // Wifi可用并且不能联网
 			
