@@ -19,16 +19,20 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.ToggleButton;
 
 /**
@@ -99,6 +103,11 @@ public class MainActivity extends Activity {
 	private Timer mTimer;
 	private Handler mHandler;
 
+	/**
+	 * 用户名/密码框是否获得用户输入焦点。
+	 */
+	boolean bFocusUsernamePassword = false;
+	
 	/**
 	 * 是否开启自动登录功能, true为开启, false为不开启。
 	 */
@@ -221,25 +230,65 @@ public class MainActivity extends Activity {
 		//
 		// });
 
-
 		// 用户-输入框
-		((EditText) this.findViewById(R.id.txt_username)).setOnKeyListener(new OnKeyListener() {
-
+		((EditText) this.findViewById(R.id.txt_username)).setOnFocusChangeListener( new OnFocusChangeListener() {
+			
 			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
+			public void onFocusChange(View v, boolean hasFocus) {
 				// TODO Auto-generated method stub
-				onKeyUserNamePassword(); //有按键输入
-				return false;
+				onFocusChangeUserNamePassword(v,hasFocus);  //焦点变化
 			}
 		});
-		// 密码输入框
-		((EditText) this.findViewById(R.id.txt_passwd)).setOnKeyListener(new OnKeyListener() {
-
+		//密码输入框
+		((EditText) this.findViewById(R.id.txt_passwd)).setOnFocusChangeListener( new OnFocusChangeListener() {
+			
 			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
+			public void onFocusChange(View v, boolean hasFocus) {
 				// TODO Auto-generated method stub
-				onKeyUserNamePassword();  //有按键输入
-				return false;
+				onFocusChangeUserNamePassword(v,hasFocus);  //焦点变化
+			}
+		});
+		// 用户-输入框
+		((EditText) this.findViewById(R.id.txt_username)).addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				onChangeUserNamePassword(); //有按键输入
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+			
+		// 密码输入框
+		((EditText) this.findViewById(R.id.txt_passwd)).addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				onChangeUserNamePassword(); //有按键输入
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 
@@ -416,6 +465,9 @@ public class MainActivity extends Activity {
 		//同步改变2个控件状态
 		m_chkbx.setChecked(bEnable); // 设置状态为不启用
 		m_tgbtn.setChecked(bEnable); // 设置状态为不启用
+
+		// 保存应用数据
+		saveData();
 		
 		doLogin();
 	}
@@ -424,9 +476,6 @@ public class MainActivity extends Activity {
 	 * 
 	 */
 	protected void doLogin() {
-
-		// 保存应用数据
-		saveData();
 
 		if( bEnable ){
 			m_msg.setText(R.string.msg_login); //开启登录中
@@ -462,12 +511,32 @@ public class MainActivity extends Activity {
 	protected void onClickQuit(View v) {
 
 	}
-
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		
+		//System.out.println("onPause() called! bFocus=" + bFocusUsernamePassword);
+		bFocusUsernamePassword = false;  //activity paused and is not focus!
+	}
+	
+	/**
+	 * 用户名/密码框焦点变化时调用。
+	 */
+	protected void onFocusChangeUserNamePassword(View v, boolean hasFocus){
+		
+		bFocusUsernamePassword = hasFocus;
+		//System.out.println("onFocusChangeUserNamePassword() called! bFocus=" + bFocusUsernamePassword);
+	}
+	
 	/**
 	 * 输入的用户名/密码有变化时调用
 	 */
-	protected void onKeyUserNamePassword() {
+	protected void onChangeUserNamePassword() {
 		//System.out.println("onKeyUserNamePassword() called! bEnable=" + bEnable);
+		
+		//如果未获得输入焦点，则不做任何处理
+		if( !bFocusUsernamePassword ) return;
 		
 		if (bEnable) {// 如果开启了自动登录, 则暂时关闭
 			bEnable = !bEnable;
@@ -616,7 +685,6 @@ public class MainActivity extends Activity {
 		String passWord = myPref.getString(PASSWORD, "");
 
 		// bEnable = myPref.getBoolean(AUTOLOGIN, false);
-		//System.out.println("load: bEnable =" + bEnable);
 
 		// 更新界面, 这个地方会修改bEnable的值!
 		m_username.setText(userName);
@@ -627,6 +695,10 @@ public class MainActivity extends Activity {
 		} else {
 			bEnable = true;
 		}
+		
+		//System.out.println("load: bEnable =" + bEnable);
+		//System.out.println("bFocus=" + bFocusUsernamePassword);
+		
 		m_tgbtn.setChecked(bEnable);
 		m_chkbx.setChecked(bEnable);
 

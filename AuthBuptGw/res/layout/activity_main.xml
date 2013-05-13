@@ -11,6 +11,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
+    <!--  Just use for input focus  -->
+    <LinearLayout android:focusable="true" android:focusableInTouchMode="true" android:layout_width="0px" android:layout_height="0px"/>
+    
     <TableLayout
         android:id="@+id/layout_table"
         android:layout_width="wrap_content"
@@ -93,10 +96,12 @@
     </TableLayout>
 
     <LinearLayout
+        android:focusable="true"  
+		android:focusableInTouchMode="true"
         android:orientation="horizontal"
-         android:layout_marginTop="10dp"
-         android:layout_marginLeft="5dp"
-         android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
         <View
