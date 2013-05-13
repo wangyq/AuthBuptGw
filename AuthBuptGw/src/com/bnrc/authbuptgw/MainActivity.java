@@ -125,6 +125,9 @@ public class MainActivity extends Activity {
 	 */
 	boolean bWifiEnable = false;
 
+	IntentFilter filter = null;
+	BroadcastReceiver receiver = null;
+	
 	/**
 	 * 
 	 */
@@ -289,10 +292,10 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		IntentFilter filter = new IntentFilter();
+		filter = new IntentFilter();
 		filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 		filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-		this.registerReceiver(new BroadcastReceiver() {
+		receiver =	new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, android.content.Intent intent) {// Wifi状态变化
 				// TODO Auto-generated method stub
@@ -309,7 +312,7 @@ public class MainActivity extends Activity {
 					//scheduleTask(TASK_UPDATE_UI);
 				}
 			}
-		}, filter);
+		};
 
 	}
 
@@ -335,6 +338,20 @@ public class MainActivity extends Activity {
 
 	}
 
+//	@Override
+//	protected void onResume() {
+//		// TODO Auto-generated method stub
+//		super.onResume();
+//		this.registerReceiver(receiver, filter);
+//	}
+//
+//	@Override
+//	protected void onPause() {
+//		// TODO Auto-generated method stub
+//		super.onPause();
+//		this.unregisterReceiver(receiver);
+//	}
+
 	/**
 	 * 
 	 */
@@ -346,7 +363,18 @@ public class MainActivity extends Activity {
 		// 装入数据
 		loadData();		
 		
+		//register
+		this.registerReceiver(receiver, filter);
+		
 		scheduleTask(TASK_LOGIN);// 后台任务执行
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		
+		this.unregisterReceiver(receiver);
 	}
 
 	/**
