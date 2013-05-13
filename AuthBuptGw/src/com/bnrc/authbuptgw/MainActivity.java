@@ -17,6 +17,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -441,10 +443,16 @@ public class MainActivity extends Activity {
 	 */
 	protected void onClickAbout(View v) {
 		// scheduleTask(); // 后台任务执行
-		String strTitle = this.getString(R.string.title_activity_about);
+		String strTitle = this.getString(R.string.title_about);
+		String strAbout = this.getString(R.string.txt_about).replaceAll("VERSION_NAME", getVersion());
+		//System.out.println("About=" + strAbout);
+		
 		LayoutInflater inflater = getLayoutInflater();
 		View layout = inflater.inflate(R.layout.about_dialog, (ViewGroup) findViewById(R.id.about_dialog));
-		new AlertDialog.Builder(this).setTitle(strTitle).setView(layout).setPositiveButton("确定", null).show();
+		AlertDialog.Builder dlg = new AlertDialog.Builder(this).setTitle(strTitle).setView(layout).setPositiveButton("确定", null);
+		//dlg.setIcon(android.R.drawable.ic_dialog_info);
+		dlg.setMessage(strAbout);
+		dlg.show();
 	}
 
 	/**
@@ -583,7 +591,22 @@ public class MainActivity extends Activity {
 
 		m_msg.setText(sb.toString()); // 设置提示信息
 	}
-
+	 /**
+	  * 获取版本号
+	  * @return 当前应用的版本号
+	  */
+	 public String getVersion() {
+	     try {
+	         PackageManager manager = this.getPackageManager();
+	         PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+	         String version = info.versionName;
+	         return version;
+	         //return this.getString(R.string.version_name) + version;
+	     } catch (Exception e) {
+	         e.printStackTrace();
+	         return "";
+	     }
+	 }
 	/**
 	 * 从存储中读取出数据并显示到界面上面
 	 */
