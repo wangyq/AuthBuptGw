@@ -4,7 +4,6 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build.VERSION;
 
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import android.os.Bundle;
@@ -18,11 +17,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -222,33 +221,23 @@ public class MainActivity extends Activity {
 
 
 		// 用户-输入框
-		((EditText) this.findViewById(R.id.txt_username)).addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				onTextChangedUserNamePassword(s);
-			}
+		((EditText) this.findViewById(R.id.txt_username)).setOnKeyListener(new OnKeyListener() {
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				// TODO Auto-generated method stub
+				onKeyUserNamePassword(); //有按键输入
+				return false;
 			}
 		});
 		// 密码输入框
-		((EditText) this.findViewById(R.id.txt_passwd)).addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				onTextChangedUserNamePassword(s);
-			}
+		((EditText) this.findViewById(R.id.txt_passwd)).setOnKeyListener(new OnKeyListener() {
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				// TODO Auto-generated method stub
+				onKeyUserNamePassword();  //有按键输入
+				return false;
 			}
 		});
 
@@ -469,7 +458,9 @@ public class MainActivity extends Activity {
 	/**
 	 * 输入的用户名/密码有变化时调用
 	 */
-	protected void onTextChangedUserNamePassword(CharSequence s) {
+	protected void onKeyUserNamePassword() {
+		//System.out.println("onKeyUserNamePassword() called! bEnable=" + bEnable);
+		
 		if (bEnable) {// 如果开启了自动登录, 则暂时关闭
 			bEnable = !bEnable;
 
@@ -556,9 +547,10 @@ public class MainActivity extends Activity {
 	protected void updateUI() {
 		
 		StringBuffer sb = new StringBuffer();
-
-		//System.out.println("updateUI: bEnable =" + bEnable);
 		//sb.append("bEnable =" + bEnable );
+		
+		//System.out.println("updateUI: bEnable =" + bEnable);
+		
 		
 		// wifi
 		bWifiEnable = AuthUtil.isWifiEnable(this);
@@ -603,7 +595,7 @@ public class MainActivity extends Activity {
 		// bEnable = myPref.getBoolean(AUTOLOGIN, false);
 		//System.out.println("load: bEnable =" + bEnable);
 
-		// 更新界面
+		// 更新界面, 这个地方会修改bEnable的值!
 		m_username.setText(userName);
 		m_password.setText(passWord);
 
