@@ -380,21 +380,21 @@ public class MainActivity extends Activity {
 		destroyTimer();
 	}
 
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onRestoreInstanceState(savedInstanceState);
-		
-		//bEnable = savedInstanceState.getBoolean(AUTOLOGIN);  //恢复变量值
-	}
-	
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
-		super.onSaveInstanceState(outState);
-		
-		//outState.putBoolean(AUTOLOGIN, bEnable); //保存变量值
-	}
+//	@Override
+//	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//		// TODO Auto-generated method stub
+//		super.onRestoreInstanceState(savedInstanceState);
+//		
+//		//bEnable = savedInstanceState.getBoolean(AUTOLOGIN);  //恢复变量值
+//	}
+//	
+//	@Override
+//	protected void onSaveInstanceState(Bundle outState) {
+//		// TODO Auto-generated method stub
+//		super.onSaveInstanceState(outState);
+//		
+//		//outState.putBoolean(AUTOLOGIN, bEnable); //保存变量值
+//	}
 
 	/**
 	 * 
@@ -511,15 +511,15 @@ public class MainActivity extends Activity {
 	protected void onClickQuit(View v) {
 
 	}
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		
-		//System.out.println("onPause() called! bFocus=" + bFocusUsernamePassword);
-		bFocusUsernamePassword = false;  //activity paused and is not focus!
-	}
-	
+//	@Override
+//	protected void onPause() {
+//		// TODO Auto-generated method stub
+//		super.onPause();
+//		
+//		//System.out.println("onPause() called! bFocus=" + bFocusUsernamePassword);
+//		bFocusUsernamePassword = false;  //activity paused and is not focus!
+//	}
+//	
 	/**
 	 * 用户名/密码框焦点变化时调用。
 	 */
@@ -687,6 +687,8 @@ public class MainActivity extends Activity {
 		// bEnable = myPref.getBoolean(AUTOLOGIN, false);
 
 		// 更新界面, 这个地方会修改bEnable的值!
+		bFocusUsernamePassword = false;  //设置非焦点
+		
 		m_username.setText(userName);
 		m_password.setText(passWord);
 
