@@ -3,6 +3,7 @@ package com.bnrc.authbuptgw.util;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
 
@@ -15,6 +16,12 @@ public class HttpUtil {
 
 	/**
 	 * 
+	 */
+	static final int CONN_TIMEOUT = 2;   //Socket 连接超时, 单位秒
+	
+	static final int SOCKET_TIMEOUT = 2; //Socket 读/写超时，单位秒 
+	/**
+	 * 
 	 * @param req
 	 * @return
 	 * @throws Exception
@@ -23,7 +30,13 @@ public class HttpUtil {
 		Socket socket = null;
 		URL url = new URL(req.getUrlString());
 		int port = url.getPort() == -1 ? 80 : url.getPort();
-		socket = new Socket(InetAddress.getByName(url.getHost()), port);
+		InetAddress addr = InetAddress.getByName(url.getHost());
+		
+		//socket = new Socket(InetAddress.getByName(url.getHost()), port);
+		socket = new Socket();
+		socket.connect(new InetSocketAddress(addr, port), CONN_TIMEOUT*1000);  //指定连接超时
+		socket.setSoTimeout(SOCKET_TIMEOUT * 1000);   //指定读写超时
+		
 		OutputStream outStream = socket.getOutputStream();
 		String reqStr = req.getRequestHeader();
 

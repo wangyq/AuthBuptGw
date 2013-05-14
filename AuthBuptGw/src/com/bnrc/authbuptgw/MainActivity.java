@@ -668,8 +668,8 @@ public class MainActivity extends Activity {
 
 		if (!bWifiEnable) {// wifi状态
 			sb.append(this.getString(R.string.msg_wifi_fail));
-		} else {
-			sb.append("SSID= " + AuthUtil.getCurWifiSSID(this)+"\n");
+		} else {//wifi 可用。
+			sb.append(this.getString(R.string.msg_ssid) + AuthUtil.getCurWifiSSID(this)+"\n"); //无线热点名称
 		}
 		
 		if (bNetOK ) { //

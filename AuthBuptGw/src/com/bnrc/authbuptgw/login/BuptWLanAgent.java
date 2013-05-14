@@ -43,7 +43,7 @@ public class BuptWLanAgent extends LoginEngine implements ILoginAgent {
 		// TODO Auto-generated method stub
 		HttpRequest request = new HttpRequest(URL_RELOGIN, "POST");  //POST 方法
 		String[] keys = new String[]{"DDDDD","upass",  "AMKKey"};
-		String[] values = new String[]{this.username, this.password, ""};
+		String[] values = new String[]{this.username,this.password, ""};
 		
 		request.addParam(keys, values);  //添加参数
 		request.addHeaderFieldDefault(); //默认报头
