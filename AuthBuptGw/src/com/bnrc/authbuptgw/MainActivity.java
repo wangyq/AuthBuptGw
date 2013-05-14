@@ -669,7 +669,7 @@ public class MainActivity extends Activity {
 		if (!bWifiEnable) {// wifi状态
 			sb.append(this.getString(R.string.msg_wifi_fail));
 		} else {
-			sb.append("SSID= " + AuthUtil.getCurWifiSSID(this)+"\n");
+			sb.append("SSID = " + AuthUtil.getCurWifiSSID(this)+"\n");
 		}
 		
 		if (bNetOK ) { //
