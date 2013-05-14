@@ -5,6 +5,11 @@ import com.bnrc.authbuptgw.util.HttpRequest;
 import com.bnrc.authbuptgw.util.HttpResponse;
 import com.bnrc.authbuptgw.util.HttpUtil;
 
+/**
+ * 北邮无线热点的登录功能
+ * @author wang
+ *
+ */
 public class BuptWLanAgent extends LoginEngine implements ILoginAgent {
 
 	final static String URL_LOGIN = "http://10.4.1.2";
