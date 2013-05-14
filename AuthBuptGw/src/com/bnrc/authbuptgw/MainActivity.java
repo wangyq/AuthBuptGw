@@ -656,7 +656,7 @@ public class MainActivity extends Activity {
 	protected void updateUI() {
 		
 		StringBuffer sb = new StringBuffer();
-		//sb.append("bEnable =" + bEnable + ",SSID=" + AuthUtil.getCurWifiSSID(this)+"\n");
+		//sb.append("bEnable =" + bEnable );
 		
 		//System.out.println("updateUI: bEnable =" + bEnable);
 		
@@ -668,7 +668,10 @@ public class MainActivity extends Activity {
 
 		if (!bWifiEnable) {// wifi状态
 			sb.append(this.getString(R.string.msg_wifi_fail));
+		} else {
+			sb.append("SSID= " + AuthUtil.getCurWifiSSID(this)+"\n");
 		}
+		
 		if (bNetOK ) { //
 			sb.append(this.getString(R.string.msg_network_ok));
 		} else if (bWifiEnable) {
