@@ -5,13 +5,13 @@ import com.bnrc.authbuptgw.util.HttpRequest;
 import com.bnrc.authbuptgw.util.HttpResponse;
 import com.bnrc.authbuptgw.util.HttpUtil;
 
-public class Bupt1Agent extends LoginEngine implements ILoginAgent {
+public class BuptWLanAgent extends LoginEngine implements ILoginAgent {
 
 	final static String URL_LOGIN = "http://10.4.1.2";
 	final static String URL_LOGOUT = "http://10.4.1.2/F.htm";
 	final static String URL_RELOGIN = "http://10.4.1.2/a11.htm";
 	
-	protected Bupt1Agent(String user, String passwd){
+	protected BuptWLanAgent(String user, String passwd){
 		this.username = user;
 		this.password = passwd;
 	}

@@ -19,12 +19,8 @@ public class LoginEngine {
 	 * @return
 	 */
 	public static ILoginAgent getLoginAgent(String user, String passwd, String ssid){
-		if( ssid.equals("BUPT-1") ) {
-			return new Bupt1Agent(user,passwd);
-		} else if( ssid.equals("BUPT-2") ) {
-			return new Bupt2Agent(user,passwd);
-		} else if( ssid.equals("BUPT-3") ) {
-			return new Bupt3Agent(user,passwd);
+		if( ssid.startsWith("BUPT-")) {
+			return new BuptWLanAgent(user,passwd);
 		} else if( (ssid == null) || (ssid.length()==0) ){
 			return null;
 		}
