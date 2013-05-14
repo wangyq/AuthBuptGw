@@ -672,7 +672,7 @@ public class MainActivity extends Activity {
 			sb.append(this.getString(R.string.msg_ssid) + AuthUtil.getCurWifiSSID(this)+"\n"); //无线热点名称
 		}
 		
-		if (bNetOK ) { //
+		if (bNetOK ) { //网络正常
 			sb.append(this.getString(R.string.msg_network_ok));
 		} else if (bWifiEnable) {
 			sb.append(this.getString(R.string.msg_network_fail));
