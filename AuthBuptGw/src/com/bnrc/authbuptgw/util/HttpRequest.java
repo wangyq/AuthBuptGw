@@ -29,7 +29,7 @@ public class HttpRequest {
 	 * @param strUrl
 	 */
 	public HttpRequest(String strUrl, String method) throws InvalidParameterException {
-		this.defaultContentEncoding = Charset.defaultCharset().name();
+		this.defaultContentEncoding = Charset.defaultCharset().name();  //in Android , it is UTF8
 		this.url = strUrl;
 		if (method.equalsIgnoreCase(METHOD_GET)) {
 			this.isGet = true;
@@ -125,7 +125,23 @@ public class HttpRequest {
 		params.put(name.trim(), value.trim());
 		return true;
 	}
-
+	/**
+	 * 添加参数
+	 * 
+	 * @param names
+	 * @param values
+	 * @return
+	 */
+	public boolean addParam(String[] names, String[] values) {
+		if (names.length == 0 || (values.length == 0)) {
+			return false;
+		}
+		if( names.length != values.length ) return false;
+		for(int i=0; i<names.length;i++){
+			addParam(names[i], values[i]);
+		}
+		return true;
+	}
 	public boolean addParam(Map<String, String> p ){
 		if( p != null ){
 			params.putAll(p);
@@ -206,5 +222,16 @@ public class HttpRequest {
 		headRequest.put(name.trim(), value.trim());
 		return true;
 
+	}
+	
+	/**
+	 * 添加默认的头部域。
+	 * @return
+	 */
+	public void addHeaderFieldDefault(){
+		addHeaderField("Cache-Control: no-cache");
+		addHeaderField("Connection: keep-alive");
+		addHeaderField("Accept-Language: zh-CN");
+		addHeaderField("Accept-Charset: GBK,utf-8");
 	}
 }

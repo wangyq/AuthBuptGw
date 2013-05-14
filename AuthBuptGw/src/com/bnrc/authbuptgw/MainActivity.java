@@ -6,6 +6,10 @@ import android.os.Build.VERSION;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.bnrc.authbuptgw.login.ILoginAgent;
+import com.bnrc.authbuptgw.login.LoginEngine;
+
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.annotation.SuppressLint;
@@ -600,8 +604,6 @@ public class MainActivity extends Activity {
 		boolean bOK = false;
 		String user = m_username.getText().toString();
 		String passwd = m_password.getText().toString();
-		String strUrl = this.getString(R.string.URL_LOGIN);
-		String strUrlRelogin = this.getString(R.string.URL_RELOGIN);
 		
 		//登录的重试次数
 		int loginRetryNum = Integer.parseInt( this.getString(R.string.LOGIN_RETRY_NUMBER) );
@@ -609,13 +611,18 @@ public class MainActivity extends Activity {
 			loginRetryNum = LOGIN_RETRY_DEFAULT_NUM;
 		}
 		
+		//获得登录代理
+		ILoginAgent agent = LoginEngine.getLoginAgent(user, passwd, AuthUtil.getCurWifiSSID(this));
+		if( agent == null ) {  //取不到登录代理，直接返回。
+			return bOK;
+		}
 		for( int i=0; i<loginRetryNum ; i++ ){  //反复登录直到成功, 或者直到最大尝试次数为止
 			
-			AuthUtil.login(strUrl, user, passwd);  //常规登录方式
+			agent.login();  //常规登录方式
 			bOK = isNetAvailable();    //检查网络是否可用
 			if( bOK ) break;  //登录成功则退出。
 			
-			AuthUtil.relogin(strUrlRelogin, user, passwd);   //断开再登录方式
+			agent.relogin();   //断开再登录方式
 			bOK = isNetAvailable();    //检查网络是否可用
 			if( bOK ) break;  //登录成功则退出。
 			
@@ -649,7 +656,7 @@ public class MainActivity extends Activity {
 	protected void updateUI() {
 		
 		StringBuffer sb = new StringBuffer();
-		//sb.append("bEnable =" + bEnable );
+		sb.append("bEnable =" + bEnable + ",SSID=" + AuthUtil.getCurWifiSSID(this)+"\n");
 		
 		//System.out.println("updateUI: bEnable =" + bEnable);
 		

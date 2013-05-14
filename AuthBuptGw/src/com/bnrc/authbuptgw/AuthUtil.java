@@ -19,133 +19,124 @@ import android.net.wifi.WifiManager;
 public class AuthUtil {
 	private static char md5Chars[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
-	/**
-	 * 生成登录请求发送到服务器 curl --silent -d
-	 * "DDDDD=$USERNAME&upass=$upass&R1=0&R2=1&para=00&0MKKey=123456"
-	 * "$URL_LOGIN"`
-	 * 
-	 * @param user
-	 * @param passwd
-	 * @return
-	 */
-	public static boolean login(String strUrl, String user, String passwd) {
-		if ((strUrl.length() == 0) || (user.length() == 0) || (passwd.length() == 0)) {
-			return false;
-		}
-		
-		HttpRequest request = new HttpRequest(strUrl, "POST");  //POST 方法
-		
-		request.addParam("DDDDD", user);
-		request.addParam("upass", genPasswd(passwd));
-		request.addParam("R1", "0");
-		request.addParam("R2", "1");
-		request.addParam("para", "00");
-		request.addParam("0MKKey", "123456");
-		
-		request.addHeaderField("Cache-Control: no-cache");
-		request.addHeaderField("Connection: keep-alive");
-		request.addHeaderField("Accept-Language: zh-CN");
-		request.addHeaderField("Accept-Charset: GBK,utf-8");
-
-		//HttpResponse response = HttpUtil.sendAndGetContent(request);
-		HttpResponse response = HttpUtil.send(request);
-		
-		//response.print();
-		
-		return "200".equals(response.getStatusCode());
-	}
-
-	// public static boolean login(String strUrl, String user, String passwd) {
-	// boolean bOK = false;
-	// HttpURLConnection conn = null;
-	//
-	// // Error check!
-	// if ((strUrl.length() == 0) || (user.length() == 0) || (passwd.length() ==
-	// 0)){
-	// return bOK;
-	// }
-	//
-	// Map<String, String> params = new HashMap<String, String>();
-	// params.put("DDDDD", user);
-	// params.put("upass", genPasswd(passwd));
-	// params.put("R1", "0");
-	// params.put("R2", "0");
-	// params.put("para", "00");
-	// params.put("0MKKey", "123456");
-	//
-	// try {
-	// conn = (HttpURLConnection) HttpRequestUtil.sendPostRequest(strUrl,
-	// params, null);
-	// int code = conn.getResponseCode();
-	// bOK = (code == 200);
-	// } catch (Exception e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// } finally {
-	// conn.disconnect();
-	// }
-	//
-	// return bOK;
-	//
-	// }
-
-	/**
-	 * 生成登出请求发送到服务器
-	 * 
-	 * @param user
-	 * @param passwd
-	 * @return
-	 */
-	public static boolean logout(String strUrl, String user, String passwd) {
-		if ((strUrl.length() == 0) || (user.length() == 0) || (passwd.length() == 0)) {
-			return false;
-		}
-		
-		HttpRequest request = new HttpRequest(strUrl, "GET");  //GET 方法
-
-		request.addHeaderField("Cache-Control: no-cache");
-		request.addHeaderField("Connection: keep-alive");
-		request.addHeaderField("Accept-Language: zh-CN");
-		request.addHeaderField("Accept-Charset: GBK,utf-8");
-
-		//HttpResponse response = HttpUtil.sendAndGetContent(request);
-		HttpResponse response = HttpUtil.send(request);
-		
-		//response.print();
-		
-		return "200".equals(response.getStatusCode());
-	}
-	
-	/**
-	 * 重新登录, POST 方法: 
-	 * DDDDD=username&upass=passwd&AMKKey=
-	 * @param strUrl
-	 * @return
-	 */
-	public static boolean relogin(String strUrl, String user, String passwd){
-		if ((strUrl.length() == 0) || (user.length() == 0) || (passwd.length() == 0)) {
-			return false;
-		}
-		
-		HttpRequest request = new HttpRequest(strUrl, "POST");  //POST 方法
-		
-		request.addParam("DDDDD", user);
-		request.addParam("upass", passwd);
-		request.addParam("AMKKey", "");
-		
-		request.addHeaderField("Cache-Control: no-cache");
-		request.addHeaderField("Connection: keep-alive");
-		request.addHeaderField("Accept-Language: zh-CN");
-		request.addHeaderField("Accept-Charset: GBK,utf-8");
-
-		//HttpResponse response = HttpUtil.sendAndGetContent(request);
-		HttpResponse response = HttpUtil.send(request);
-		
-		//response.print();
-		
-		return "200".equals(response.getStatusCode());
-	}
-	
+//	/**
+//	 * 生成登录请求发送到服务器 curl --silent -d
+//	 * "DDDDD=$USERNAME&upass=$upass&R1=0&R2=1&para=00&0MKKey=123456"
+//	 * "$URL_LOGIN"`
+//	 * 
+//	 * @param user
+//	 * @param passwd
+//	 * @return
+//	 */
+//	public static boolean login(String strUrl, String user, String passwd) {
+//		if ((strUrl.length() == 0) || (user.length() == 0) || (passwd.length() == 0)) {
+//			return false;
+//		}
+//		
+//		HttpRequest request = new HttpRequest(strUrl, "POST");  //POST 方法
+//		
+//		request.addParam("DDDDD", user);
+//		request.addParam("upass", genPasswd(passwd));
+//		request.addParam("R1", "0");
+//		request.addParam("R2", "1");
+//		request.addParam("para", "00");
+//		request.addParam("0MKKey", "123456");
+//		
+//		request.addHeaderFieldDefault();
+//
+//		//HttpResponse response = HttpUtil.sendAndGetContent(request);
+//		HttpResponse response = HttpUtil.send(request);
+//		
+//		//response.print();
+//		
+//		return "200".equals(response.getStatusCode());
+//	}
+//
+//	// public static boolean login(String strUrl, String user, String passwd) {
+//	// boolean bOK = false;
+//	// HttpURLConnection conn = null;
+//	//
+//	// // Error check!
+//	// if ((strUrl.length() == 0) || (user.length() == 0) || (passwd.length() ==
+//	// 0)){
+//	// return bOK;
+//	// }
+//	//
+//	// Map<String, String> params = new HashMap<String, String>();
+//	// params.put("DDDDD", user);
+//	// params.put("upass", genPasswd(passwd));
+//	// params.put("R1", "0");
+//	// params.put("R2", "0");
+//	// params.put("para", "00");
+//	// params.put("0MKKey", "123456");
+//	//
+//	// try {
+//	// conn = (HttpURLConnection) HttpRequestUtil.sendPostRequest(strUrl,
+//	// params, null);
+//	// int code = conn.getResponseCode();
+//	// bOK = (code == 200);
+//	// } catch (Exception e) {
+//	// // TODO Auto-generated catch block
+//	// e.printStackTrace();
+//	// } finally {
+//	// conn.disconnect();
+//	// }
+//	//
+//	// return bOK;
+//	//
+//	// }
+//
+//	/**
+//	 * 生成登出请求发送到服务器
+//	 * 
+//	 * @param user
+//	 * @param passwd
+//	 * @return
+//	 */
+//	public static boolean logout(String strUrl, String user, String passwd) {
+//		if ((strUrl.length() == 0) || (user.length() == 0) || (passwd.length() == 0)) {
+//			return false;
+//		}
+//		
+//		HttpRequest request = new HttpRequest(strUrl, "GET");  //GET 方法
+//
+//		request.addHeaderFieldDefault();
+//
+//		//HttpResponse response = HttpUtil.sendAndGetContent(request);
+//		HttpResponse response = HttpUtil.send(request);
+//		
+//		//response.print();
+//		
+//		return "200".equals(response.getStatusCode());
+//	}
+//	
+//	/**
+//	 * 重新登录, POST 方法: 
+//	 * DDDDD=username&upass=passwd&AMKKey=
+//	 * @param strUrl
+//	 * @return
+//	 */
+//	public static boolean relogin(String strUrl, String user, String passwd){
+//		if ((strUrl.length() == 0) || (user.length() == 0) || (passwd.length() == 0)) {
+//			return false;
+//		}
+//		
+//		HttpRequest request = new HttpRequest(strUrl, "POST");  //POST 方法
+//		
+//		request.addParam("DDDDD", user);
+//		request.addParam("upass", passwd);
+//		request.addParam("AMKKey", "");
+//		
+//		request.addHeaderFieldDefault();
+//
+//		//HttpResponse response = HttpUtil.sendAndGetContent(request);
+//		HttpResponse response = HttpUtil.send(request);
+//		
+//		//response.print();
+//		
+//		return "200".equals(response.getStatusCode());
+//	}
+//	
 	// public static boolean logout(String strUrl, String user, String passwd) {
 	// boolean bOK = false;
 	// HttpURLConnection conn = null;
@@ -189,10 +180,7 @@ public class AuthUtil {
 	public static boolean checkUrl(String strUrl, String content) {
 		HttpRequest request = new HttpRequest(strUrl, "GET");  //GET 方法
 		
-		request.addHeaderField("Cache-Control: no-cache");
-		request.addHeaderField("Connection: keep-alive");
-		request.addHeaderField("Accept-Language: zh-CN");
-		request.addHeaderField("Accept-Charset: GBK,utf-8");
+		request.addHeaderFieldDefault();
 
 		//HttpResponse response = HttpUtil.sendAndGetContent(request);
 		HttpResponse response = HttpUtil.send(request);
@@ -341,6 +329,16 @@ public class AuthUtil {
 		return bOK;
 	}
 
+	/**
+	 * 获取当前连接的WIFI热点SSID名称。注意先判断wifi是否可用。
+	 * @param activitiy
+	 * @return 返回SSID名， 如果无连接，返回null
+	 */
+	public static String getCurWifiSSID(Activity activitiy) {
+		WifiManager wm = (WifiManager) activitiy.getSystemService(Context.WIFI_SERVICE);
+		WifiInfo wifiInfo = wm.getConnectionInfo();
+		return wifiInfo.getSSID();
+	}
 	/**
 	 * 开启关闭 Wifi功能
 	 * @param activitiy
