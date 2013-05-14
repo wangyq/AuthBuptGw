@@ -656,7 +656,7 @@ public class MainActivity extends Activity {
 	protected void updateUI() {
 		
 		StringBuffer sb = new StringBuffer();
-		sb.append("bEnable =" + bEnable + ",SSID=" + AuthUtil.getCurWifiSSID(this)+"\n");
+		//sb.append("bEnable =" + bEnable + ",SSID=" + AuthUtil.getCurWifiSSID(this)+"\n");
 		
 		//System.out.println("updateUI: bEnable =" + bEnable);
 		
