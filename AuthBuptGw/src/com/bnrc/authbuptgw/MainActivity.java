@@ -526,11 +526,12 @@ public class MainActivity extends Activity {
 		//System.out.println("About=" + strAbout);
 		
 		LayoutInflater inflater = getLayoutInflater();
-		View layout = inflater.inflate(R.layout.about_dialog, (ViewGroup) findViewById(R.id.about_dialog));
-		AlertDialog.Builder dlg = new AlertDialog.Builder(this).setTitle(strTitle).setView(layout).setPositiveButton("确定", null);
-		((TextView)layout.findViewById(R.id.txt_about)).setTag(strAbout);
-		dlg.setIcon(android.R.drawable.ic_dialog_info);
-		//dlg.setMessage(strAbout);
+		View view = inflater.inflate(R.layout.about_dialog, (ViewGroup) findViewById(R.id.about_dialog));
+		
+		AlertDialog.Builder dlg = new AlertDialog.Builder(this).setTitle(strTitle).setView(view).setPositiveButton("确定", null);
+		((TextView)view.findViewById(R.id.txt_about)).setTag(strAbout);
+		//dlg.setIcon(android.R.drawable.ic_dialog_info);
+		dlg.setMessage(strAbout);
 		dlg.show();
 	}
 
