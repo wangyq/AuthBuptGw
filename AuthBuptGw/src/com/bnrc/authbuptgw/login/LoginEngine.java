@@ -4,12 +4,22 @@ public class LoginEngine {
 	/**
 	 * 用户名
 	 */
-	protected String username;
+	protected static String username;
 	
 	/**
 	 * 密码
 	 */
-	String password;
+	protected static String password;
+	
+	/**
+	 * 
+	 */
+	protected static BuptWLanAgent wlAgent = new BuptWLanAgent();
+	
+	/**
+	 * 
+	 */
+	protected static BuptNetAgent netAgent = new BuptNetAgent();
 	
 	/**
 	 * 生成登录代理进行各种登录操作。
@@ -19,11 +29,14 @@ public class LoginEngine {
 	 * @return
 	 */
 	public static ILoginAgent getLoginAgent(String user, String passwd, String ssid){
+		username = user;
+		password = passwd;
+		
 		if( ssid.startsWith("BUPT-")) {
-			return new BuptWLanAgent(user,passwd);
+			return wlAgent;
 		} else if( (ssid == null) || (ssid.length()==0) ){
 			return null;
 		}
-		return new BuptNetAgent(user, passwd);
+		return netAgent;
 	}
 }

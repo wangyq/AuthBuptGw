@@ -16,16 +16,14 @@ public class BuptWLanAgent extends LoginEngine implements ILoginAgent {
 	final static String URL_LOGOUT = "http://10.4.1.2/F.htm";
 	final static String URL_RELOGIN = "http://10.4.1.2/a11.htm";
 	
-	protected BuptWLanAgent(String user, String passwd){
-		this.username = user;
-		this.password = passwd;
+	protected BuptWLanAgent(){
 	}
 	@Override
 	public boolean login() {
 		// TODO Auto-generated method stub
 		HttpRequest request = new HttpRequest(URL_LOGIN, "POST");  //POST 方法
 		String[] keys = new String[]{"DDDDD","upass", "R1", "R2", "para", "0MKKey"};
-		String[] values = new String[]{this.username, genPassword(), "0","1", "00", "123456"};
+		String[] values = new String[]{username, genPassword(), "0","1", "00", "123456"};
 		
 		request.addParam(keys, values);  //添加参数
 		request.addHeaderFieldDefault(); //默认报头
@@ -43,7 +41,7 @@ public class BuptWLanAgent extends LoginEngine implements ILoginAgent {
 		// TODO Auto-generated method stub
 		HttpRequest request = new HttpRequest(URL_RELOGIN, "POST");  //POST 方法
 		String[] keys = new String[]{"DDDDD","upass",  "AMKKey"};
-		String[] values = new String[]{this.username,this.password, ""};
+		String[] values = new String[]{username,password, ""};
 		
 		request.addParam(keys, values);  //添加参数
 		request.addHeaderFieldDefault(); //默认报头

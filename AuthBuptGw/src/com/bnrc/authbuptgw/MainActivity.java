@@ -528,8 +528,9 @@ public class MainActivity extends Activity {
 		LayoutInflater inflater = getLayoutInflater();
 		View layout = inflater.inflate(R.layout.about_dialog, (ViewGroup) findViewById(R.id.about_dialog));
 		AlertDialog.Builder dlg = new AlertDialog.Builder(this).setTitle(strTitle).setView(layout).setPositiveButton("确定", null);
-		//dlg.setIcon(android.R.drawable.ic_dialog_info);
-		dlg.setMessage(strAbout);
+		((TextView)layout.findViewById(R.id.txt_about)).setTag(strAbout);
+		dlg.setIcon(android.R.drawable.ic_dialog_info);
+		//dlg.setMessage(strAbout);
 		dlg.show();
 	}
 
