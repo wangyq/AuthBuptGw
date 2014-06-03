@@ -316,14 +316,19 @@ public class AuthUtil {
 		WifiManager wm = (WifiManager) activitiy.getSystemService(Context.WIFI_SERVICE);
 		bOK = (wm.getWifiState() == WifiManager.WIFI_STATE_ENABLED);
 
-		 WifiInfo wifiInfo = wm.getConnectionInfo();
-		 int ipAddress = (wifiInfo == null ? 0 : wifiInfo.getIpAddress());
-		 if ( wm.isWifiEnabled() && ipAddress != 0 ) {
-			 // System.out.println("**** WIFI is on");
-			 bOK = true;
-		 } else {
-			 // System.out.println("**** WIFI is off");
-		 }
+		//here WiFi must be enabled , otherwise getting ip address may be failed!
+		if( bOK ){
+			 WifiInfo wifiInfo = wm.getConnectionInfo(); //may be a long-time process?
+			 
+			 int ipAddress = (wifiInfo == null ? 0 : wifiInfo.getIpAddress()); //here may be a time-delay process?
+			 
+			 if ( wm.isWifiEnabled() && ipAddress != 0 ) {
+				 // System.out.println("**** WIFI is on");
+				 bOK = true;
+			 } else {
+				 // System.out.println("**** WIFI is off");
+			 }
+		}
 		//return true;
 		
 		return bOK;
