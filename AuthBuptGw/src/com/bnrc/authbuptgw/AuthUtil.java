@@ -178,13 +178,23 @@ public class AuthUtil {
 	 * @return
 	 */
 	public static boolean checkUrl(String strUrl, String content) {
-		HttpRequest request = new HttpRequest(strUrl, "GET");  //GET 方法
+		boolean bOK = false;
+		HttpResponse response = null;
 		
-		request.addHeaderFieldDefault();
+		//here must be catch exception!!!
+		try {
+			HttpRequest request = new HttpRequest(strUrl, "GET");  //GET 方法
+			
+			request.addHeaderFieldDefault();
 
-		//HttpResponse response = HttpUtil.sendAndGetContent(request);
-		HttpResponse response = HttpUtil.send(request);
-		return "200".equals(response.getStatusCode());
+			//HttpResponse response = HttpUtil.sendAndGetContent(request);
+			response = HttpUtil.send(request);
+			bOK =  "200".equals(response.getStatusCode());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return bOK;
 	}
 
 	/**
@@ -317,6 +327,7 @@ public class AuthUtil {
 		bOK = (wm.getWifiState() == WifiManager.WIFI_STATE_ENABLED);
 
 		//here WiFi must be enabled , otherwise getting ip address may be failed!
+		//must get the real ip address.
 		if( bOK ){
 			 WifiInfo wifiInfo = wm.getConnectionInfo(); //may be a long-time process?
 			 
@@ -341,8 +352,11 @@ public class AuthUtil {
 	 */
 	public static String getCurWifiSSID(Activity activitiy) {
 		WifiManager wm = (WifiManager) activitiy.getSystemService(Context.WIFI_SERVICE);
-		WifiInfo wifiInfo = wm.getConnectionInfo();
-		return wifiInfo.getSSID();
+		if( null != wm ){
+			WifiInfo wifiInfo = wm.getConnectionInfo();
+			return wifiInfo.getSSID();
+		}
+		return null;
 	}
 	/**
 	 * 开启关闭 Wifi功能
@@ -351,7 +365,9 @@ public class AuthUtil {
 	 */
 	public static void changeWifiState(Activity activitiy,boolean isOn){
 		WifiManager wm = (WifiManager) activitiy.getSystemService(Context.WIFI_SERVICE);
-		wm.setWifiEnabled(isOn);
+		if( null != wm ){
+			wm.setWifiEnabled(isOn);
+		}
 	}
 	/**
 	 * 返回加密的字符串
