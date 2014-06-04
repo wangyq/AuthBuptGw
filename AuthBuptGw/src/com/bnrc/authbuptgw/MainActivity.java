@@ -357,17 +357,17 @@ public class MainActivity extends Activity {
 	// }
 
 	/**
-	 * 
+	 * Here is the activity main entry
 	 */
 	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
 
-		// 装入数据
+		// 装入数据到控件中，然后显示到用户界面
 		loadData();
 
-		// register
+		// register，注册WiFi事件监听功能
 		this.registerReceiver(receiver, filter);
 
 		scheduleTask(TASK_LOGIN);// 后台任务执行
@@ -430,7 +430,7 @@ public class MainActivity extends Activity {
 	// }
 
 	/**
-	 * 
+	 * Activity 初始化时执行。用于初始化变量、事件Handler等。
 	 */
 	@SuppressLint("NewApi")
 	@Override
