@@ -119,10 +119,15 @@ public class HttpRequest {
 	 * @return
 	 */
 	public boolean addParam(String name, String value) {
-		if (name.length() == 0 || (value.length() == 0)) {
+		name = name.trim();
+		if (name.length() == 0 ) {
 			return false;
 		}
-		params.put(name.trim(), value.trim());
+		value = value.trim();
+		if( value == null ){
+			value = "";
+		}
+		params.put(name, value);
 		return true;
 	}
 	/**
@@ -162,7 +167,12 @@ public class HttpRequest {
 		while (it.hasNext()) {
 			String name = it.next();
 			String value = params.get(name);
-			sBuffer.append(name + "=" + URLEncoder.encode(value, defaultContentEncoding) + "&");
+			if( value.length() > 0 ){
+				sBuffer.append(name + "=" + URLEncoder.encode(value, defaultContentEncoding) + "&");
+			}
+			else{
+				sBuffer.append(name + "=" +  "&");
+			}
 		}
 		if( sBuffer.length()>0) {
 			sBuffer.deleteCharAt(sBuffer.length() - 1);

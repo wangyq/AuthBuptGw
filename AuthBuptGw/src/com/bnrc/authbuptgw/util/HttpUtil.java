@@ -40,6 +40,9 @@ public class HttpUtil {
 		OutputStream outStream = socket.getOutputStream();
 		String reqStr = req.getRequestHeader();
 
+		//Just for debug now!
+		//System.out.println("HTTP REQUEST : \r" + reqStr );
+		
 		outStream.write(reqStr.getBytes()); // 写入HTTP 请求头部
 		return socket;
 	}
