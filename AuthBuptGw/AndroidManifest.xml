@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bnrc.authbuptgw"
     android:versionCode="6"
-    android:versionName="2.0 release" >
+    android:versionName="2.0 RC" >
 
     <uses-sdk
         android:minSdkVersion="8"
