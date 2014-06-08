@@ -27,6 +27,9 @@ public class BuptNetAgent  extends LoginEngine implements ILoginAgent{
 
 	}
 	/* 
+	 * 2014-06-08:
+	 * 请求格式: DDDDD=108247&upass=000000&savePWD=0&0MKKey=
+	 * 
 	 * 生成登录请求发送到服务器:
 	 *  curl --silent -d "DDDDD=$USERNAME&upass=$upass&R1=0&R2=1&para=00&0MKKey=123456"	 "$URL_LOGIN
 	 * @see com.bnrc.authbuptgw.login.ILoginAgent#login()
@@ -35,11 +38,15 @@ public class BuptNetAgent  extends LoginEngine implements ILoginAgent{
 	public boolean login() {
 		// TODO Auto-generated method stub
 		HttpRequest request = new HttpRequest(URL_LOGIN, "POST");  //POST 方法
-		String[] keys = new String[]{"DDDDD","upass", "R1", "R2", "para", "0MKKey"};
-		String[] values = new String[]{username, genPassword(), "0","1", "00", "123456"};
+		//String[] keys = new String[]{"DDDDD","upass", "R1", "R2", "para", "0MKKey"};
+		//String[] values = new String[]{username, genPassword(), "0","1", "00", "123456"};
+		
+		String[] keys = new String[]{"DDDDD", "upass", "savePWD", "0MKKey"};
+		String[] values = new String[]{username, password, "0",""};
 		
 		request.addParam(keys, values);  //添加参数
 		request.addHeaderFieldDefault(); //默认报头
+		request.addHeaderField("Cookie",genCookie());
 
 		//HttpResponse response = HttpUtil.sendAndGetContent(request);
 		HttpResponse response = HttpUtil.send(request);
@@ -50,19 +57,20 @@ public class BuptNetAgent  extends LoginEngine implements ILoginAgent{
 	}
 
 	/* (non-Javadoc)
+	 * 登录格式: DDDDD=xxx&upass=xxx&passplace=密码 Password&AMKKey=
 	 * @see com.bnrc.authbuptgw.login.ILoginAgent#relogin()
 	 */
 	@Override
 	public boolean relogin() {
 		// TODO Auto-generated method stub
 		HttpRequest request = new HttpRequest(URL_RELOGIN, "POST");  //POST 方法
-		String[] keys = new String[]{"DDDDD","upass",  "AMKKey"};
-		String[] values = new String[]{username, password, ""};
+		String[] keys = new String[]{"DDDDD", "upass", "passplace",  "AMKKey"};
+		String[] values = new String[]{username, password, "密码 Password", ""};
 		
 		request.addParam(keys, values);  //添加参数
 		request.addHeaderFieldDefault(); //默认报头
 		
-		request.addHeaderFieldDefault();
+		request.addHeaderField("Cookie",genCookie());
 
 		//HttpResponse response = HttpUtil.sendAndGetContent(request);
 		HttpResponse response = HttpUtil.send(request);
@@ -81,7 +89,8 @@ public class BuptNetAgent  extends LoginEngine implements ILoginAgent{
 		HttpRequest request = new HttpRequest(URL_LOGOUT, "GET");  //GET 方法
 
 		request.addHeaderFieldDefault();
-
+		request.addHeaderField("Cookie",genCookie());
+		
 		//HttpResponse response = HttpUtil.sendAndGetContent(request);
 		HttpResponse response = HttpUtil.send(request);
 		
@@ -90,6 +99,20 @@ public class BuptNetAgent  extends LoginEngine implements ILoginAgent{
 		return "200".equals(response.getStatusCode());
 	}
 
+	/**
+	 * 生成登录请求中的cookie
+	 * Cookie: myusername=108247; pwd=000000; username=108247; smartdot=000000
+	 * @return
+	 */
+	protected String genCookie(){
+		String strCookieString = "myusername=" + username + "; pwd=" + password + "; username=" + username + "; smartdot=000000" ;
+		
+		return strCookieString;
+	}
+	/**
+	 * 
+	 * @return
+	 */
 	protected String genPassword(){
 		String s1 = "1" + password + "12345678";
 		String res = "";

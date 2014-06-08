@@ -344,7 +344,31 @@ public class AuthUtil {
 		
 		return bOK;
 	}
-
+	/**
+	 * 将整数转换为字符串形式的IP地址。 0 转为 0.0.0.0
+	 * @param i
+	 * @return IPv4地址的字符串形式
+	 */
+	public static String IntegerToIPv4( int i )  {
+	    return (i & 0xFF)+ "." + ((i >> 8 ) & 0xFF) + "." + ((i >> 16 ) & 0xFF) +"."+((i >> 24 ) & 0xFF);
+	 }
+	
+	/**
+	 * 获取当前连接的WIFI热点的IP地址。注意先判断wifi是否可用。
+	 * @param activitiy
+	 * @return 返回IPv4地址， 如果无连接，返回null
+	 */
+	public static String getCurWifiIPv4Addr(Activity activitiy) {
+		String strIpv4 = null ;
+		WifiManager wm = (WifiManager) activitiy.getSystemService(Context.WIFI_SERVICE);
+		if( null != wm ){
+			WifiInfo wifiInfo = wm.getConnectionInfo();
+			if ( wm.isWifiEnabled() ){ // 没开启wifi时,ip地址为0.0.0.0
+				strIpv4 = IntegerToIPv4( wifiInfo.getIpAddress() );
+			}
+		}
+		return strIpv4;
+	}
 	/**
 	 * 获取当前连接的WIFI热点SSID名称。注意先判断wifi是否可用。
 	 * @param activitiy

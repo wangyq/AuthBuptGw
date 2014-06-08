@@ -16,6 +16,7 @@
     <string name="btn_quit">退  出</string>
     <string name="btn_about">关  于</string>
     <string name="msg_ssid">无线热点: </string>
+    <string name="msg_ip_addr">IP地址: </string>
     <string name="msg_login_ok">登录成功!</string>
     <string name="msg_login_fail">登录失败!</string>
     <string name="msg_login_disabled">登录未启用!</string>
@@ -35,5 +36,5 @@
     <string name="URL_CHECK_NETWORK1">http://m.sogou.com</string>
     <string name="URL_CHECK_CONTENT1">搜狗</string>
     <string name="title_about">关于</string>
-    <string name="txt_about">北邮校园网自动登录工具\n AuthBuptGW (ver VERSION_NAME ) \n yinqingwang@gmail.com \n May 28, 2014</string>
+    <string name="txt_about">北邮校园网自动登录工具\n AuthBuptGW (ver VERSION_NAME ) \n yinqingwang@gmail.com \n June 8, 2014</string>
 </resources>

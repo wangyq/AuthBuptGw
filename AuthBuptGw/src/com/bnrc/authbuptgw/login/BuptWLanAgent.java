@@ -18,6 +18,10 @@ public class BuptWLanAgent extends LoginEngine implements ILoginAgent {
 	
 	protected BuptWLanAgent(){
 	}
+	
+	/**
+	 * 
+	 */
 	@Override
 	public boolean login() {
 		// TODO Auto-generated method stub
@@ -27,7 +31,8 @@ public class BuptWLanAgent extends LoginEngine implements ILoginAgent {
 		
 		request.addParam(keys, values);  //添加参数
 		request.addHeaderFieldDefault(); //默认报头
-
+		request.addHeaderField("Cookie",genCookie());
+		
 		//HttpResponse response = HttpUtil.sendAndGetContent(request);
 		HttpResponse response = HttpUtil.send(request);
 		
@@ -36,17 +41,20 @@ public class BuptWLanAgent extends LoginEngine implements ILoginAgent {
 		return "200".equals(response.getStatusCode());
 	}
 
+	/**
+	 * 登录格式: DDDDD=xxx&upass=xxx&passplace=密码 Password&AMKKey=
+	 */
 	@Override
 	public boolean relogin() {
 		// TODO Auto-generated method stub
 		HttpRequest request = new HttpRequest(URL_RELOGIN, "POST");  //POST 方法
-		String[] keys = new String[]{"DDDDD","upass",  "AMKKey"};
-		String[] values = new String[]{username,password, ""};
+		String[] keys = new String[]{"DDDDD", "upass", "passplace",  "AMKKey"};
+		String[] values = new String[]{username, password, "密码 Password", ""};
 		
 		request.addParam(keys, values);  //添加参数
 		request.addHeaderFieldDefault(); //默认报头
 		
-		request.addHeaderFieldDefault();
+		request.addHeaderField("Cookie",genCookie());
 
 		//HttpResponse response = HttpUtil.sendAndGetContent(request);
 		HttpResponse response = HttpUtil.send(request);
@@ -62,7 +70,8 @@ public class BuptWLanAgent extends LoginEngine implements ILoginAgent {
 		HttpRequest request = new HttpRequest(URL_LOGOUT, "GET");  //GET 方法
 
 		request.addHeaderFieldDefault();
-
+		request.addHeaderField("Cookie",genCookie());
+		
 		//HttpResponse response = HttpUtil.sendAndGetContent(request);
 		HttpResponse response = HttpUtil.send(request);
 		
@@ -70,6 +79,21 @@ public class BuptWLanAgent extends LoginEngine implements ILoginAgent {
 		
 		return "200".equals(response.getStatusCode());
 	}
+	/**
+	 * 生成登录请求中的cookie
+	 * Cookie: myusername=108247; pwd=000000; username=108247; smartdot=000000
+	 * @return
+	 */
+	protected String genCookie(){
+		String strCookieString = "myusername=" + username + "; pwd=" + password + "; username=" + username + "; smartdot=000000" ;
+		
+		return strCookieString;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	protected String genPassword(){
 		String s1 = "1" + password + "12345678";
 		String res = "";
