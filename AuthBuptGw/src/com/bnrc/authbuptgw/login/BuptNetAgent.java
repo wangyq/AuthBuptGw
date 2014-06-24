@@ -101,7 +101,7 @@ public class BuptNetAgent  extends LoginEngine implements ILoginAgent{
 
 	/**
 	 * 生成登录请求中的cookie
-	 * Cookie: myusername=108247; pwd=000000; username=108247; smartdot=000000
+	 * Cookie: myusername=108247; pwd=xxxxxx; username=108247; smartdot=000000
 	 * @return
 	 */
 	protected String genCookie(){
