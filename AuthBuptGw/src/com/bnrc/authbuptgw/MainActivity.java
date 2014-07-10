@@ -75,12 +75,8 @@ public class MainActivity extends Activity {
 	static final int TASK_DELAY = 1; // Seconds;
 
 	/**
-	 * 登录失败后，尝试重新登录的延迟时间. 单位 : 秒
-	 */
-	static final int LOGIN_RETRY_DELAY = 3;
-
-	/**
 	 * 点击wifi按钮后， 执行登录操作的延迟时间。 避免wifi状态后界面无响应。
+	 * wifi状态改变后， 会触发登录操作。所以这个时间可做可不做。
 	 */
 	static final int WIFI_CLICK_LOGIN_DELAY = 6;
 
@@ -92,15 +88,15 @@ public class MainActivity extends Activity {
 	static final int TASK_UPDATE_UI = 4;
 
 	/**
-	 * 每次登录时，反复登录的最大次数
+	 * 每次登录时，反复重尝试的次数
 	 */
-	static final int LOGIN_RETRY_MAX_NUM = 20;
-
+	static final int LOGIN_RETRY_NUM = 3;
+	
 	/**
-	 * 每次登录时，反复登录的默认次数
+	 * 上次登录失败后， 下一次登录的延迟时间. 单位 : 秒
 	 */
-	static final int LOGIN_RETRY_DEFAULT_NUM = 3;
-
+	static final int LOGIN_RETRY_DELAY = 1;
+	
 	private Timer mTimer;
 	private Handler mHandler;
 
@@ -482,7 +478,7 @@ public class MainActivity extends Activity {
 
 		AuthUtil.changeWifiState(this, bWifiEnable); // 改变wifi状态
 
-		// 延迟调度执行登录操作。
+		// 延迟调度执行登录操作。这里也许不需要, wifi事件会触发登录操作
 		scheduleTask(TASK_LOGIN, WIFI_CLICK_LOGIN_DELAY);
 	}
 
@@ -617,11 +613,8 @@ public class MainActivity extends Activity {
 		String passwd = m_password.getText().toString();
 
 		// 登录的重试次数
-		int loginRetryNum = Integer.parseInt(this.getString(R.string.LOGIN_RETRY_NUMBER));
-		if (loginRetryNum <= 0 || loginRetryNum >= LOGIN_RETRY_MAX_NUM) { // 有效性检查,
-																			// 避免程序死循环!
-			loginRetryNum = LOGIN_RETRY_DEFAULT_NUM;
-		}
+		// 避免程序死循环!
+		int loginRetryNum = LOGIN_RETRY_NUM;
 
 		try {
 			// 获得登录代理
@@ -695,7 +688,7 @@ public class MainActivity extends Activity {
 			sb.append(this.getString(R.string.msg_wifi_fail));
 		} else {// wifi 可用，但是不一定有效。
 			sb.append(this.getString(R.string.msg_ssid) + AuthUtil.getCurWifiSSID(this) + "\n"); // 无线热点名称
-			sb.append(this.getString(R.string.msg_ip_addr) + AuthUtil.getCurWifiIPv4Addr(this) + "\n" );     //获取IPv4地址
+			sb.append(this.getString(R.string.msg_ip_addr) + AuthUtil.getCurWifiIPv4Addr(this) + "\n"); // 获取IPv4地址
 		}
 
 		if (bNetOK) { // 网络正常

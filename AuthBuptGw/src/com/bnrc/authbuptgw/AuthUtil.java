@@ -324,11 +324,12 @@ public class AuthUtil {
 		boolean bOK = false;
 
 		WifiManager wm = (WifiManager) activitiy.getSystemService(Context.WIFI_SERVICE);
-		bOK = (wm.getWifiState() == WifiManager.WIFI_STATE_ENABLED);
-
+		
+		if( wm.getWifiState() == WifiManager.WIFI_STATE_ENABLED)
+		{
 		//here WiFi must be enabled , otherwise getting ip address may be failed!
 		//must get the real ip address.
-		if( bOK ){
+		
 			 WifiInfo wifiInfo = wm.getConnectionInfo(); //may be a long-time process?
 			 
 			 int ipAddress = (wifiInfo == null ? 0 : wifiInfo.getIpAddress()); //here may be a time-delay process?
@@ -338,6 +339,7 @@ public class AuthUtil {
 				 bOK = true;
 			 } else {
 				 // System.out.println("**** WIFI is off");
+				 // bOK = false;
 			 }
 		}
 		
