@@ -657,20 +657,18 @@ public class MainActivity extends Activity {
 		bWifiEnable = AuthUtil.isWifiEnable(this); // 检查Wifi网络
 		bIPv4Enable = AuthUtil.isWifiIPAvailable(this);
 		
-		// must check if wifi is enabled!
-		//
-		bNetOK = false; // first, bNetOK is false.
-		if (bIPv4Enable) {
-			bNetOK = isNetAvailable(); // 测试网络连通性
-		}
-
-		if (bIPv4Enable && bEnable && !bNetOK) { // 检查是否可登录, 并且internet不可用
+		if (bIPv4Enable && bEnable ) { // 检查是否可登录, 并且internet不可用
 			// if ( bWifiEnable && bEnable ) { // 检查是否可登录, 并且internet不可用
-			bLoginOK = login(); // 进行登录操作
+			bNetOK = isNetAvailable(); //先测试下网络
+			
+			if(  !bNetOK ) {
+				bLoginOK = login(); // 进行登录操作
+				bNetOK = isNetAvailable(); //测试下网络
+			}
 		}
-
-		if (bIPv4Enable) {
-			bNetOK = isNetAvailable(); // 登录之后，测试网络连通性
+		else {
+			// 无论WiFi状态, 看看网络是否连通
+			bNetOK = isNetAvailable(); // 测试网络连通性, 网络不通，是否很花时间呢?
 		}
 
 	}
