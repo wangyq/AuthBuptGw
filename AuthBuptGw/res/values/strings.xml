@@ -20,7 +20,7 @@
     <string name="msg_login_ok">登录成功!</string>
     <string name="msg_login_fail">登录失败!</string>
     <string name="msg_login_disabled">登录未启用!</string>
-    <string name="msg_wifi_fail">WIFI网络不可用!</string>
+    <string name="msg_wifi_fail">WiFi已关闭!</string>
     <string name="msg_wifi_change_on">开启WIFI网络中......</string>
     <string name="msg_wifi_change_off">关闭WIFI网络中......</string>
     <string name="msg_network_ok">互联网正常!</string>
