@@ -699,13 +699,13 @@ public class MainActivity extends Activity {
 
 		if (bNetOK) { // 网络正常
 			sb.append(this.getString(R.string.msg_network_ok));
-		} else if (bWifiEnable) {
+		} else {//if (bWifiEnable) {
 			sb.append(this.getString(R.string.msg_network_fail));
 		}
 
-		if (bWifiEnable && bEnable && bLoginOK) { // Wifi可用, 联网正常, 启用登录
+		if (bIPv4Enable && bEnable && bLoginOK) { // Wifi可用, 联网正常, 启用登录
 			sb.append(this.getString(R.string.msg_login_ok));
-		} else if (bWifiEnable && !bNetOK) { // Wifi可用并且不能联网
+		} else if (bIPv4Enable && !bNetOK) { // Wifi可用并且不能联网
 
 			if (bEnable) {// 启用登录功能
 				sb.append(this.getString(R.string.msg_login_fail)); // 登录失败
