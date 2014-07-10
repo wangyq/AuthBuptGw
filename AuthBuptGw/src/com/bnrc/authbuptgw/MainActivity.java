@@ -125,6 +125,11 @@ public class MainActivity extends Activity {
 	 */
 	boolean bWifiEnable = false;
 
+	/**
+	 * IPv4地址是否可用
+	 */
+	boolean bIPv4Enable = false;
+	
 	IntentFilter filter = null;
 	BroadcastReceiver receiver = null;
 
@@ -650,20 +655,21 @@ public class MainActivity extends Activity {
 	protected void checkNetworkAndLogin() {
 
 		bWifiEnable = AuthUtil.isWifiEnable(this); // 检查Wifi网络
-
+		bIPv4Enable = AuthUtil.isWifiIPAvailable(this);
+		
 		// must check if wifi is enabled!
 		//
 		bNetOK = false; // first, bNetOK is false.
-		if (bWifiEnable) {
+		if (bIPv4Enable) {
 			bNetOK = isNetAvailable(); // 测试网络连通性
 		}
 
-		if (bWifiEnable && bEnable && !bNetOK) { // 检查是否可登录, 并且internet不可用
+		if (bIPv4Enable && bEnable && !bNetOK) { // 检查是否可登录, 并且internet不可用
 			// if ( bWifiEnable && bEnable ) { // 检查是否可登录, 并且internet不可用
 			bLoginOK = login(); // 进行登录操作
 		}
 
-		if (bWifiEnable) {
+		if (bIPv4Enable) {
 			bNetOK = isNetAvailable(); // 登录之后，测试网络连通性
 		}
 
@@ -681,6 +687,8 @@ public class MainActivity extends Activity {
 
 		// wifi
 		bWifiEnable = AuthUtil.isWifiEnable(this);
+		bIPv4Enable = AuthUtil.isWifiIPAvailable(this);
+		
 		m_tgbtn_wifi.setChecked(bWifiEnable);
 		m_chkbx_wifi.setChecked(bWifiEnable);
 

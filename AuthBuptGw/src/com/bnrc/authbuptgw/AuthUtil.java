@@ -321,31 +321,18 @@ public class AuthUtil {
 	 */
 	public static boolean isWifiEnable(Activity activitiy) {
 
-		boolean bOK = false;
-
 		WifiManager wm = (WifiManager) activitiy.getSystemService(Context.WIFI_SERVICE);
 		
-		if( wm.getWifiState() == WifiManager.WIFI_STATE_ENABLED)
-		{
-		//here WiFi must be enabled , otherwise getting ip address may be failed!
-		//must get the real ip address.
-		
-			 WifiInfo wifiInfo = wm.getConnectionInfo(); //may be a long-time process?
-			 
-			 int ipAddress = (wifiInfo == null ? 0 : wifiInfo.getIpAddress()); //here may be a time-delay process?
-			 
-			 if ( wm.isWifiEnabled() && ipAddress != 0 ) {
-				 // System.out.println("**** WIFI is on");
-				 bOK = true;
-			 } else {
-				 // System.out.println("**** WIFI is off");
-				 // bOK = false;
-			 }
-		}
-		
-		//return true;
-		
-		return bOK;
+		return wm.getWifiState() == WifiManager.WIFI_STATE_ENABLED;
+	
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static boolean isWifiIPAvailable(Activity activitiy){
+		return getCurWifiIPv4AddrInt(activitiy) != 0;
 	}
 	/**
 	 * 将整数转换为字符串形式的IP地址。 0 转为 0.0.0.0
@@ -357,20 +344,28 @@ public class AuthUtil {
 	 }
 	
 	/**
-	 * 获取当前连接的WIFI热点的IP地址。注意先判断wifi是否可用。
+	 * 
 	 * @param activitiy
-	 * @return 返回IPv4地址， 如果无连接，返回null
+	 * @return
 	 */
-	public static String getCurWifiIPv4Addr(Activity activitiy) {
-		String strIpv4 = null ;
+	public static int getCurWifiIPv4AddrInt(Activity activitiy) {
+		int Ipv4 = 0 ;
 		WifiManager wm = (WifiManager) activitiy.getSystemService(Context.WIFI_SERVICE);
 		if( null != wm ){
 			WifiInfo wifiInfo = wm.getConnectionInfo();
 			if ( wm.isWifiEnabled() ){ // 没开启wifi时,ip地址为0.0.0.0
-				strIpv4 = IntegerToIPv4( wifiInfo.getIpAddress() );
+				Ipv4 =  wifiInfo.getIpAddress() ;
 			}
 		}
-		return strIpv4;
+		return Ipv4;
+	}
+	/**
+	 * 获取当前连接的WIFI热点的IP地址。注意先判断wifi是否可用。
+	 * @param activitiy
+	 * @return 返回IPv4地址， 如果无地址，返回"0.0.0.0"
+	 */
+	public static String getCurWifiIPv4Addr(Activity activitiy) {
+		return IntegerToIPv4(getCurWifiIPv4AddrInt(activitiy));
 	}
 	/**
 	 * 获取当前连接的WIFI热点SSID名称。注意先判断wifi是否可用。
