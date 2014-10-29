@@ -6,7 +6,8 @@ import com.bnrc.authbuptgw.util.HttpResponse;
 import com.bnrc.authbuptgw.util.HttpUtil;
 
 /**
- * 北邮无线热点的登录功能
+ * 北邮校园网无线热点的登录功能
+ * 无线热点的网络名类似: BUPT-1, BUPT-2, BUPT-3等。
  * @author wang
  *
  */

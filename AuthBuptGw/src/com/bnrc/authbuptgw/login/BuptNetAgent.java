@@ -10,7 +10,7 @@ import com.bnrc.authbuptgw.util.HttpUtil;
 
 /**
  * @author wangyq
- *  用于北邮校园网的登录功能。
+ *  用于北邮校园网的有线网络的登录功能。
  */
 public class BuptNetAgent  extends LoginEngine implements ILoginAgent{
 
