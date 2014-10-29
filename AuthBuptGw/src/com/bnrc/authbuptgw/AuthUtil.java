@@ -367,18 +367,31 @@ public class AuthUtil {
 	public static String getCurWifiIPv4Addr(Activity activitiy) {
 		return IntegerToIPv4(getCurWifiIPv4AddrInt(activitiy));
 	}
+	
 	/**
 	 * 获取当前连接的WIFI热点SSID名称。注意先判断wifi是否可用。
 	 * @param activitiy
-	 * @return 返回SSID名， 如果无连接，返回null
+	 * @return
 	 */
 	public static String getCurWifiSSID(Activity activitiy) {
+		return getCurWifiSSID(activitiy, null);
+	}
+	/**
+	 * 获取当前连接的WIFI热点SSID名称。注意先判断wifi是否可用。
+	 * @param activitiy
+	 * @return 返回SSID名， 如果无连接，返回 strNull
+	 */
+	public static String getCurWifiSSID(Activity activitiy, String strNull) {
+		String ssidString = null;
 		WifiManager wm = (WifiManager) activitiy.getSystemService(Context.WIFI_SERVICE);
 		if( null != wm ){
 			WifiInfo wifiInfo = wm.getConnectionInfo();
-			return wifiInfo.getSSID();
+			ssidString =  wifiInfo.getSSID();
 		}
-		return null;
+		if( ssidString == null ){
+			ssidString = strNull;
+		}
+		return ssidString;
 	}
 	/**
 	 * 开启关闭 Wifi功能

@@ -693,7 +693,7 @@ public class MainActivity extends Activity {
 		if (!bWifiEnable) {// wifi状态
 			sb.append(this.getString(R.string.msg_wifi_fail));
 		} else {// wifi 可用，但是不一定有效。
-			sb.append(this.getString(R.string.msg_ssid) + AuthUtil.getCurWifiSSID(this) + "\n"); // 无线热点名称
+			sb.append(this.getString(R.string.msg_ssid) + AuthUtil.getCurWifiSSID(this, this.getString(R.string.msg_wifi_ssid_fail)) + "\n"); // 无线热点名称
 			sb.append(this.getString(R.string.msg_ip_addr) + AuthUtil.getCurWifiIPv4Addr(this) + "\n"); // 获取IPv4地址
 		}
 
