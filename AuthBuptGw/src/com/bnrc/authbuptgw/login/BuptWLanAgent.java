@@ -21,14 +21,19 @@ public class BuptWLanAgent extends LoginEngine implements ILoginAgent {
 	}
 	
 	/**
-	 * 
+	 * 登录的字符串(POST数据) : DDDDD=108247&upass=000000&0MKKey=%CC%E1%BD%BB
+	 * 其中0MKKey的值为"登录"
 	 */
 	@Override
 	public boolean login() {
 		// TODO Auto-generated method stub
 		HttpRequest request = new HttpRequest(URL_LOGIN, "POST");  //POST 方法
-		String[] keys = new String[]{"DDDDD","upass", "R1", "R2", "para", "0MKKey"};
-		String[] values = new String[]{username, genPassword(), "0","1", "00", "123456"};
+		//String[] keys = new String[]{"DDDDD","upass", "R1", "R2", "para", "0MKKey"};
+		//String[] values = new String[]{username, genPassword(), "0","1", "00", "123456"};
+		
+		//2014-12-02 修改
+		String[] keys = new String[]{"DDDDD","upass", "0MKKey"};
+		String[] values = new String[]{username, password, "登录"};
 		
 		request.addParam(keys, values);  //添加参数
 		request.addHeaderFieldDefault(); //默认报头
@@ -82,11 +87,11 @@ public class BuptWLanAgent extends LoginEngine implements ILoginAgent {
 	}
 	/**
 	 * 生成登录请求中的cookie
-	 * Cookie: myusername=108247; pwd=xxxxxx; username=108247; smartdot=000000
+	 * Cookie: myusername=108247; pwd=xxxxxx; username=108247; smartdot=密码
 	 * @return
 	 */
 	protected String genCookie(){
-		String strCookieString = "myusername=" + username + "; pwd=" + password + "; username=" + username + "; smartdot=000000" ;
+		String strCookieString = "myusername=" + username + "; pwd=" + password + "; username=" + username + "; smartdot=" + password;
 		
 		return strCookieString;
 	}

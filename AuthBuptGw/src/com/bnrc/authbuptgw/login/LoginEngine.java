@@ -22,6 +22,28 @@ public class LoginEngine {
 	protected static BuptNetAgent netAgent = new BuptNetAgent();
 	
 	/**
+	 * 
+	 */
+	protected static String[] wlanNames = new String[]{"BUPT-1","BUPT-2","BUPT-3"};
+	
+	/**
+	 * 判断当前是否学校的无线LAN接入点 
+	 * @param ssid
+	 * @return
+	 */
+	public static boolean isWLanLogin(String ssid){
+		boolean bOk = false;
+		
+		for( String str: wlanNames){
+			if( ssid.startsWith(str) ){
+				bOk = true;
+				break;
+			}
+		}
+		
+		return bOk;
+	}
+	/**
 	 * 生成登录代理进行各种登录操作。
 	 * @param user
 	 * @param passwd
@@ -32,11 +54,11 @@ public class LoginEngine {
 		username = user;
 		password = passwd;
 		
-		if( ssid.startsWith("BUPT-")) {
+		if( isWLanLogin(ssid) ) {//学校的无线LAN接入点
 			return wlAgent;
 		} else if( (ssid == null) || (ssid.length()==0) ){
 			return null;
 		}
-		return netAgent;
+		return netAgent;  //默认的, 有线接入点或者自定义的接入点
 	}
 }
